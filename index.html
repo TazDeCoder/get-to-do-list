@@ -14,7 +14,88 @@
       type="text/css"
       href="./assets/stylesheets/style.css"
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="./assets/stylesheets/icons.css"
+    />
+    <script defer src="./app.js"></script>
     <title>To-Do-List</title>
   </head>
-  <body></body>
+  <body>
+    <header class="head">
+      <div class="head__content">
+        <a
+          class="head__content-link"
+          href="https://www.iconfinder.com/paomedia"
+          title="Link to Designer"
+          target="_blank"
+        >
+          <img
+            class="head__content-logo"
+            src="./assets/images/notepad_icon.png"
+          />
+        </a>
+        <h1 class="head__content-header">To-Do-List</h1>
+      </div>
+    </header>
+    <main class="main">
+      <div class="sidebar hidden">
+        <nav class="nav">
+          <h2 class="nav__header">Tasks</h2>
+          <button class="nav__btn nav__btn--add">
+            <i class="gg-add-r"></i>
+          </button>
+          <button class="nav__btn nav__btn--close">
+            <i class="gg-menu-round"></i>
+          </button>
+        </nav>
+        <ol class="sidebar__list"></ol>
+      </div>
+      <div class="menu">
+        <nav class="nav">
+          <h2 class="nav__header">Projects</h2>
+          <button class="nav__btn nav__btn--add">
+            <i class="gg-add-r"></i>
+          </button>
+        </nav>
+        <div class="menu__content"></div>
+      </div>
+    </main>
+    <div class="modal modal-project hidden">
+      <button class="btn btn--close-modal">&times;</button>
+      <h2 class="modal__header">New Project</h2>
+      <form class="form">
+        <label class="form__label">Name</label>
+        <input class="form__input form__input--text--name" type="text" />
+        <label class="form__label">Color</label>
+        <input class="form__input form__input--color" type="color" />
+        <button class="form__btn form__btn--submit">Create!</button>
+      </form>
+    </div>
+    <div class="modal modal-task hidden">
+      <button class="btn btn--close-modal">&times;</button>
+      <h2 class="modal__header">New Task</h2>
+      <form class="form">
+        <label class="form__label">Title</label>
+        <input class="form__input form__input--text--title" type="text" />
+        <label class="form__label">Desc.</label>
+        <input class="form__input form__input--text--desc" type="text" />
+        <label class="form__label">Due Date</label>
+        <input class="form__input form__input--date" type="date" />
+        <label class="form__label">Priority</label>
+        <select class="form__select form__select--priority">
+          <option class="form__option" value=""></option>
+          <option class="form__option" value="low-low">Low (not urgent)</option>
+          <option class="form__option" value="low-high">Low (urgent)</option>
+          <option class="form__option" value="high-low">
+            High (not urgent)
+          </option>
+          <option class="form__option" value="high-high">High (urgent)</option>
+        </select>
+        <button class="form__btn form__btn--submit">Create!</button>
+      </form>
+    </div>
+    <div class="overlay hidden"></div>
+  </body>
 </html>
