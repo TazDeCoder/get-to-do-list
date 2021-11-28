@@ -184,6 +184,7 @@ iframe {
   display: inline-block;
   width: 0%;
   height: 100%;
+  overflow-y: auto;
   transition: width 700ms;
 }
 .sidebar--expand {
@@ -213,7 +214,6 @@ iframe {
 .sidebar .nav {
   display: flex;
   align-items: center;
-  /* justify-content: flex-; */
   width: 100%;
 }
 .sidebar .nav__header {
@@ -222,12 +222,72 @@ iframe {
   font-size: 1.4rem;
   font-weight: 400;
 }
+.sidebar__header {
+  display: block;
+  margin: 0 12px;
+  font-size: 1.9rem;
+  font-weight: 600;
+}
 .sidebar__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 1rem;
 }
+
+/* 
+ *
+ * Main
+ *
+ * * * Sidebar
+ *
+ * * * * * List
+ *
+ *
+ */
+
 .sidebar__list-item {
-  margin: 12px 1rem;
-  list-style-type: decimal;
+  position: relative;
+  min-width: 8rem;
+  width: 70%;
+  min-height: 8rem;
+  max-height: 12rem;
+  padding: 1rem;
+  margin: 12px 0;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 5px;
+  transition: transform 700ms;
+}
+.sidebar__list-item:hover {
+  transform: scale(110%);
+}
+.sidebar__list-item--banner--tag {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 9px;
+  font-weight: 600;
+  color: white;
+  background-color: red;
+  border-radius: 5px;
+}
+.sidebar__list-item--banner--due {
+  display: block;
+  width: 90%;
+  padding: 5px;
+  margin: 1rem auto;
+  font-weight: 600;
+  text-align: center;
+  background-color: yellow;
+  border-radius: 12px;
+}
+.sidebar__list-item--text--desc {
+  overflow: hidden;
+  font-weight: 300;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* 
@@ -256,18 +316,23 @@ iframe {
   justify-items: center;
   width: 100%;
 }
+
+/* 
+ *
+ * Main
+ *
+ * * * Menu
+ * 
+ * * * * * Content
+ * 
+ *
+ */
+
 .menu__content-item {
   width: 10rem;
   height: 10rem;
   padding: 1rem;
   overflow: hidden;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 8rem;
-  color: white;
-  text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   cursor: pointer;
   background-color: azure;
   border: 1px solid black;
@@ -276,4 +341,13 @@ iframe {
 }
 .menu__content-item:hover {
   transform: scale(110%);
+}
+.menu__content-item-header {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 8rem;
+  color: white;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
