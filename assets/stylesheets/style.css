@@ -29,6 +29,10 @@ iframe {
    max-width: 100%;
    height: auto;
 }
+:root {
+  --color-sidebar: #d6ffdf;
+  --color-menu: #f7f7f7;
+}
 
 /*
 ================================
@@ -178,7 +182,7 @@ iframe {
 .main {
   width: 100%;
   height: 100%;
-  background-color: #d6ffdf;
+  background-color: var(--color-sidebar);
 }
 .sidebar {
   display: inline-block;
@@ -195,7 +199,7 @@ iframe {
   width: 100%;
   height: 100%;
   overflow-y: auto;
-  background-color: #f7f7f7;
+  background-color: var(--color-menu);
   transition: width 700ms;
 }
 .menu--shrink {
@@ -270,7 +274,6 @@ iframe {
   padding: 9px;
   font-weight: 600;
   color: white;
-  background-color: red;
   border-radius: 5px;
 }
 .sidebar__list-item--banner--due {

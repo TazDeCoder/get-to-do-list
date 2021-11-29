@@ -41,8 +41,23 @@ class Task {
   constructor(title, desc, dueDate, priority) {
     this.title = title;
     this.desc = desc;
-    this.dueDate = dueDate;
+    this._formatDueDate(dueDate);
     this._formatPriority(priority);
+  }
+
+  _formatDueDate(dueDate) {
+    const formatDate = new Date(dueDate);
+    const calcDaysAhead = (date1, date2) =>
+      Math.round(Math.abs(date1 - date2) / (1000 * 60 * 60 * 24));
+    const daysAhead = calcDaysAhead(new Date(), formatDate);
+    if (daysAhead === 0) return (this.dueDate = "Today");
+    if (formatDate < new Date()) return (this.dueDate = "Expired");
+    if (daysAhead === 1) return (this.dueDate = "Tommorow");
+    if (daysAhead > 1 && daysAhead <= 7)
+      return (this.dueDate = `${daysAhead} days`);
+    if (daysAhead > 7 && daysAhead <= 30)
+      return (this.dueDate = `${daysAhead % 7} weeks`);
+    return (this.dueDate = dueDate);
   }
 
   _formatPriority(priority) {
@@ -65,7 +80,7 @@ class Task {
 
 class Project {
   tasks = [];
-  id = (Date.now() + "").slice(-10);
+  id = String(Date.now()).slice(-10);
 
   constructor(name, color) {
     this.name = name;
@@ -84,7 +99,7 @@ class Project {
 class App {
   #projects = [];
   templateProject = new Project("Default", "#0000ff");
-  templateTask = new Task("Template", "Welcome!", "Today", "low-low");
+  templateTask = new Task("Template", "Welcome!", new Date(), "low-low");
 
   constructor() {
     this.templateProject.addTask(this.templateTask);
@@ -126,16 +141,14 @@ class App {
   }
 
   _renderProject(project) {
-    const div = document.createElement("div");
-    div.classList.add("menu__content-item");
-    div.dataset.id = project.id;
-    div.style.backgroundColor = project.color;
-    div.addEventListener("click", this._showTasks.bind(this, div));
-    const labelName = document.createElement("p");
-    labelName.classList.add("menu__content-item-header");
-    labelName.textContent = project.name;
-    div.appendChild(labelName);
-    menuContent.insertAdjacentElement("beforeend", div);
+    const html = `
+    <div class="menu__content-item" data-id="${project.id}" style="background-color: ${project.color}">
+      <p class="menu__content-item-header">${project.name}</p>
+    </div>
+    `;
+    menuContent.insertAdjacentHTML("beforeend", html);
+    const [menuItem] = menuContent.children;
+    menuItem.addEventListener("click", this._showTasks.bind(this, menuItem));
   }
 
   _showTasks(div) {
@@ -194,25 +207,15 @@ class App {
   }
 
   _renderTask(task) {
-    const appendChildren = (parent, ...childs) =>
-      childs.forEach((node) => {
-        parent.appendChild(node);
-      });
-    const li = document.createElement("li");
-    li.classList.add("sidebar__list-item");
-    const labelPriority = document.createElement("p");
-    labelPriority.classList.add("sidebar__list-item--banner--tag");
-    labelPriority.style.backgroundColor = `${task.priority}`;
-    const labelTitle = document.createElement("p");
-    labelTitle.textContent = task.title;
-    const labelDate = document.createElement("p");
-    labelDate.classList.add("sidebar__list-item--banner--due");
-    labelDate.textContent = task.dueDate;
-    const labelDesc = document.createElement("p");
-    labelDesc.classList.add("sidebar__list-item--text--desc");
-    labelDesc.textContent = task.desc;
-    appendChildren(li, labelPriority, labelTitle, labelDate, labelDesc);
-    sidebarList.insertAdjacentElement("beforeend", li);
+    const html = `
+    <li class="sidebar__list-item">
+      <p class="sidebar__list-item--banner--tag" style="background-color:${task.priority}"></p>
+      <p class="sidebar__list-item--text--title">${task.title}</p>
+      <p class="sidebar__list-item--banner--due">${task.dueDate}</p>
+      <p class="sidebar__list-item--text--desc">${task.desc}</p>
+    </li>
+    `;
+    sidebarList.insertAdjacentHTML("beforeend", html);
   }
 }
 
