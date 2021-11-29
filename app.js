@@ -17,11 +17,11 @@ const overlay = document.querySelector(".overlay");
 // --- Menu
 const btnAddProject = containerMenu.querySelector(".nav__btn--add");
 const btnSubmitProject = modalProject.querySelector(".form__btn--submit");
-const btnCloseProject = modalProject.querySelector(".btn--close-modal");
+const btnCloseProject = modalProject.querySelector(".modal__btn--close");
 // --- Sidebar
 const btnAddTask = containerSidebar.querySelector(".nav__btn--add");
 const btnSubmitTask = modalTask.querySelector(".form__btn--submit");
-const btnCloseTask = modalTask.querySelector(".btn--close-modal");
+const btnCloseTask = modalTask.querySelector(".modal__btn--close");
 const btnCloseSidebar = containerSidebar.querySelector(".nav__btn--close");
 // Inputs
 // --- Menu
@@ -142,8 +142,8 @@ class App {
 
   _renderProject(project) {
     const html = `
-    <div class="menu__content-item" data-id="${project.id}" style="background-color: ${project.color}">
-      <p class="menu__content-item-header">${project.name}</p>
+    <div class="content__item" data-id="${project.id}" style="background-color: ${project.color}">
+      <p class="content__header">${project.name}</p>
     </div>
     `;
     menuContent.insertAdjacentHTML("beforeend", html);
@@ -208,11 +208,11 @@ class App {
 
   _renderTask(task) {
     const html = `
-    <li class="sidebar__list-item">
-      <p class="sidebar__list-item--banner--tag" style="background-color:${task.priority}"></p>
-      <p class="sidebar__list-item--text--title">${task.title}</p>
-      <p class="sidebar__list-item--banner--due">${task.dueDate}</p>
-      <p class="sidebar__list-item--text--desc">${task.desc}</p>
+    <li class="list__item">
+      <p class="list__label--banner--tag" style="background-color:${task.priority}"></p>
+      <p class="list__label--text">${task.title}</p>
+      <p class="list__label--banner--hero">${task.dueDate}</p>
+      <p class="list__label--text">${task.desc}</p>
     </li>
     `;
     sidebarList.insertAdjacentHTML("beforeend", html);
