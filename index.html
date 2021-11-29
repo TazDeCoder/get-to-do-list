@@ -24,24 +24,21 @@
   </head>
   <body>
     <header class="head">
-      <div class="head__content">
+      <nav class="head__nav nav">
         <a
-          class="head__content-link"
+          class="link"
           href="https://www.iconfinder.com/paomedia"
           title="Link to Designer"
           target="_blank"
         >
-          <img
-            class="head__content-logo"
-            src="./assets/images/notepad_icon.png"
-          />
+          <img class="logo" src="./assets/images/notepad_icon.png" />
         </a>
-        <h1 class="head__content-header">To-Do-List</h1>
-      </div>
+        <h1 class="nav__header">To-Do-List</h1>
+      </nav>
     </header>
     <main class="main">
       <div class="sidebar hidden">
-        <nav class="nav">
+        <nav class="sidebar__nav nav">
           <h2 class="nav__header">Tasks</h2>
           <button class="nav__btn nav__btn--add">
             <i class="gg-add-r"></i>
@@ -51,22 +48,22 @@
           </button>
         </nav>
         <h2 class="sidebar__header"></h2>
-        <ul class="sidebar__list"></ul>
+        <ul class="sidebar__list list"></ul>
       </div>
       <div class="menu">
-        <nav class="nav">
+        <nav class="menu__nav nav">
           <h2 class="nav__header">Projects</h2>
           <button class="nav__btn nav__btn--add">
             <i class="gg-add-r"></i>
           </button>
         </nav>
-        <div class="menu__content"></div>
+        <div class="menu__content content"></div>
       </div>
     </main>
     <div class="modal modal-project hidden">
-      <button class="btn btn--close-modal">&times;</button>
+      <button class="modal__btn modal__btn--close">&times;</button>
       <h2 class="modal__header">New Project</h2>
-      <form class="form">
+      <form class="form form--grid">
         <label class="form__label">Name</label>
         <input class="form__input form__input--text--name" type="text" />
         <label class="form__label">Color</label>
@@ -75,9 +72,9 @@
       </form>
     </div>
     <div class="modal modal-task hidden">
-      <button class="btn btn--close-modal">&times;</button>
+      <button class="modal__btn modal__btn--close">&times;</button>
       <h2 class="modal__header">New Task</h2>
-      <form class="form">
+      <form class="form form--grid">
         <label class="form__label">Title</label>
         <input class="form__input form__input--text--title" type="text" />
         <label class="form__label">Desc.</label>
