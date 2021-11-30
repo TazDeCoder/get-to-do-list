@@ -103,7 +103,7 @@ iframe {
 }
 .form--grid {
   display: grid;
-  grid-template-columns: 40% 60%;
+  grid-template-columns: 30% 70%;
   gap: 12px;
   align-items: center;
 }
@@ -121,6 +121,12 @@ iframe {
   width: 30%;
   height: 3rem;
   cursor: pointer;
+}
+.form__input--date {
+  width: 100%;
+  height: 3rem;
+  padding: 5px;
+  font-size: 1rem;
 }
 .form__btn {
   padding: 1.25rem 4.5rem;
@@ -208,17 +214,21 @@ iframe {
   overflow-y: auto;
   transition: width 700ms;
 }
-.sidebar--expand {
-  width: 40%;
+.sidebar--expand--small {
+  width: 60%;
+}
+.sidebar--expand--large {
+  width: 80%;
 }
 .sidebar__nav {
   width: 100%;
 }
 .sidebar__header {
   display: block;
-  margin: 0 12px;
+  margin: 5px 12px;
   font-size: 1.9rem;
   font-weight: 600;
+  text-decoration: underline;
 }
 .sidebar__list {
   margin: 1rem;
@@ -234,10 +244,15 @@ iframe {
  */
 
 .sidebar .nav__header {
-  display: inline-block;
+  flex-grow: 1;
   margin: 5px;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 400;
+  text-align: center;
+}
+.sidebar .nav__icon {
+  display: inline-block;
+  transform: scale(110%);
 }
 
 /* 
@@ -251,8 +266,7 @@ iframe {
 
 .sidebar .list__item {
   position: relative;
-  min-width: 8rem;
-  width: 70%;
+  width: 90%;
   min-height: 8rem;
   max-height: 12rem;
   padding: 1rem;
@@ -277,6 +291,7 @@ iframe {
 }
 .sidebar .list__label--banner--hero {
   display: block;
+  max-width: 8.5rem;
   width: 90%;
   padding: 5px;
   margin: 1rem auto;
@@ -287,7 +302,7 @@ iframe {
 }
 .sidebar .list__label--text {
   overflow: hidden;
-  font-weight: 300;
+  font-weight: 400;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -307,11 +322,15 @@ iframe {
   background-color: var(--color-menu);
   transition: width 700ms;
 }
-.menu--shrink {
-  width: 60%;
+.menu--shrink--small {
+  width: 20%;
+}
+.menu--shrink--large {
+  width: 40%;
 }
 .menu__nav {
-  justify-content: space-around;
+  width: 100%;
+  overflow: hidden;
 }
 .menu__content {
   display: grid;
@@ -332,7 +351,7 @@ iframe {
 
 .menu .nav__header {
   margin: 1rem;
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   text-align: center;
 }
 
@@ -346,9 +365,10 @@ iframe {
  */
 
 .menu .content__item {
-  width: 10rem;
-  height: 10rem;
+  width: 8rem;
+  height: 8rem;
   padding: 1rem;
+  margin-top: 1rem;
   overflow: hidden;
   cursor: pointer;
   border: 1px solid black;
@@ -361,7 +381,7 @@ iframe {
 .menu .content__header {
   font-size: 1.5rem;
   font-weight: 600;
-  line-height: 8rem;
+  line-height: 6rem;
   color: white;
   text-align: center;
   text-overflow: ellipsis;

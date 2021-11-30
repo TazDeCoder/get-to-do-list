@@ -39,22 +39,22 @@
     <main class="main">
       <div class="sidebar hidden">
         <nav class="sidebar__nav nav">
-          <h2 class="nav__header">Tasks</h2>
+          <h2 class="nav__header"></h2>
           <button class="nav__btn nav__btn--add">
-            <i class="gg-add-r"></i>
+            <i class="nav__icon gg-add-r"></i>
           </button>
           <button class="nav__btn nav__btn--close">
-            <i class="gg-menu-round"></i>
+            <i class="nav__icon gg-menu-round"></i>
           </button>
         </nav>
-        <h2 class="sidebar__header"></h2>
+        <h2 class="sidebar__header">Tasks</h2>
         <ul class="sidebar__list list"></ul>
       </div>
       <div class="menu">
         <nav class="menu__nav nav">
           <h2 class="nav__header">Projects</h2>
           <button class="nav__btn nav__btn--add">
-            <i class="gg-add-r"></i>
+            <i class="nav__icon gg-add-r"></i>
           </button>
         </nav>
         <div class="menu__content content"></div>
@@ -79,7 +79,7 @@
         <input class="form__input form__input--text--title" type="text" />
         <label class="form__label">Desc.</label>
         <input class="form__input form__input--text--desc" type="text" />
-        <label class="form__label">Due Date</label>
+        <label class="form__label">Due</label>
         <input class="form__input form__input--date" type="date" />
         <label class="form__label">Priority</label>
         <select class="form__select form__select--priority">
