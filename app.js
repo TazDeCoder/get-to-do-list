@@ -5,7 +5,9 @@
 ///////////////////////////////////////////////
 
 // Parents
-const containerSidebar = document.querySelector(".sidebar");
+const containerMain = document.querySelector(".main");
+const sidebarLayer1 = document.querySelector(".sidebar--layer--1");
+const sidebarLayer2 = document.querySelector(".sidebar--layer--2");
 const sidebarList = document.querySelector(".sidebar__list");
 const containerMenu = document.querySelector(".menu");
 const menuContent = document.querySelector(".menu__content");
@@ -18,9 +20,9 @@ const btnCreateProject = containerMenu.querySelector(".nav__btn--add");
 const btnCloseModalProject = modalProject.querySelector(".modal__btn--close");
 const btnSubmitProject = modalProject.querySelector(".form__btn--submit");
 // --- Sidebar
-const sidebarNavHeader = containerSidebar.querySelector(".nav__header");
-const btnCloseSidebar = containerSidebar.querySelector(".nav__btn--close");
-const btnCreateTask = containerSidebar.querySelector(".nav__btn--add");
+const sidebarNavHeader = sidebarLayer2.querySelector(".nav__header");
+const btnCloseSidebar = sidebarLayer2.querySelector(".nav__btn--close");
+const btnCreateTask = sidebarLayer2.querySelector(".nav__btn--add");
 const btnCloseModalTask = modalTask.querySelector(".modal__btn--close");
 const btnSubmitTask = modalTask.querySelector(".form__btn--submit");
 // Inputs
@@ -97,11 +99,14 @@ class Project {
 ///////////////////////////////////////////////
 
 class App {
+  #mainObserver;
   #projects = [];
   templateProject = new Project("Default", "#0000ff");
   templateTask = new Task("Template", "Welcome!", new Date(), "low-low");
 
   constructor() {
+    this.#mainObserver = new ResizeObserver(this._observeMain);
+    this.#mainObserver.observe(containerMain);
     this.templateProject.addTask(this.templateTask);
     this.#projects.push(this.templateProject);
     this._renderProject(this.templateProject);
@@ -112,12 +117,48 @@ class App {
     btnSubmitProject.addEventListener("click", this._newProject.bind(this));
     btnCloseModalProject.addEventListener("click", this._hideProjectForm);
     // --- Sidebar
-    sidebarList.addEventListener("mouseover", this._expandTasks);
-    sidebarList.addEventListener("mouseout", this._shrinkTasks);
-    btnCloseSidebar.addEventListener("click", this._hideTasks);
+    btnCloseSidebar.addEventListener("click", this._hideTasks.bind(this));
     btnCreateTask.addEventListener("click", this._showTaskForm.bind(this));
     btnSubmitTask.addEventListener("click", this._newTask.bind(this));
     btnCloseModalTask.addEventListener("click", this._hideTaskForm);
+  }
+
+  _observeMain(entries) {
+    const [entry] = entries;
+    if (
+      entry.contentRect.width >= 587 ||
+      window.screen.width === window.innerWidth
+    ) {
+      containerMenu.classList.add("menu--shrink--full");
+      sidebarList.removeEventListener("mouseover", this._expandTask);
+      sidebarList.removeEventListener("mouseout", this._shrinkTask);
+    } else {
+      sidebarList.addEventListener("mouseover", this._expandTask);
+      sidebarList.addEventListener("mouseout", this._shrinkTask);
+    }
+    if (sidebarLayer2.classList.contains("hidden")) {
+      sidebarLayer1.classList.remove("hidden");
+    }
+  }
+
+  _expandTask(e) {
+    const target = e.target.closest(".list__item");
+    if (!target) return;
+    if (target.classList.contains("list__item")) {
+      sidebarLayer2.classList.add("sidebar--expand--large");
+      containerMenu.classList.remove("menu--shrink--large");
+      containerMenu.classList.add("menu--shrink--small");
+    }
+  }
+
+  _shrinkTask(e) {
+    const target = e.target.closest(".list__item");
+    if (!target) return;
+    if (target.classList.contains("list__item")) {
+      sidebarLayer2.classList.remove("sidebar--expand--large");
+      containerMenu.classList.add("menu--shrink--large");
+      containerMenu.classList.remove("menu--shrink--small");
+    }
   }
 
   _showProjectForm() {
@@ -129,6 +170,37 @@ class App {
     inputName.value = "";
     modalProject.classList.add("hidden");
     overlay.classList.add("hidden");
+  }
+
+  _showProject(e) {
+    const clicked = e.target.closest(".content__item");
+    if (!clicked) return;
+    if (clicked.classList.contains("content__item"))
+      this._showTasks.call(this, clicked);
+  }
+
+  _showTasks(div) {
+    // Fade-in-out animation
+    sidebarLayer2.classList.add("sidebar--expand--small");
+    sidebarLayer2.classList.remove("hidden");
+    containerMenu.classList.add("menu--shrink--large");
+    sidebarLayer1.classList.add("hidden");
+    // Find project
+    const project = this.#projects.find((pro) => pro.id === div.dataset.id);
+    sidebarLayer2.dataset.id = project.id;
+    // Clear sidebar
+    while (sidebarList.firstChild)
+      sidebarList.removeChild(sidebarList.firstChild);
+    // Display project name + tasks
+    sidebarNavHeader.textContent = project.name;
+    project.tasks.map((task) => this._renderTask(task));
+  }
+
+  _hideTasks() {
+    // Fade-in-out animation
+    sidebarLayer2.classList.remove("sidebar--expand--small");
+    sidebarLayer2.classList.add("hidden");
+    containerMenu.classList.remove("menu--shrink--large");
   }
 
   _newProject(e) {
@@ -150,36 +222,6 @@ class App {
     </div>
     `;
     menuContent.insertAdjacentHTML("beforeend", html);
-  }
-
-  _showProject(e) {
-    const clicked = e.target.closest(".content__item");
-    if (!clicked) return;
-    if (clicked.classList.contains("content__item"))
-      this._showTasks.call(this, clicked);
-  }
-
-  _showTasks(div) {
-    // Fade-in-out animation
-    containerSidebar.classList.add("sidebar--expand--small");
-    containerSidebar.classList.remove("hidden");
-    containerMenu.classList.add("menu--shrink--large");
-    // Find project
-    const project = this.#projects.find((pro) => pro.id === div.dataset.id);
-    containerSidebar.dataset.id = project.id;
-    // Clear sidebar
-    while (sidebarList.firstChild)
-      sidebarList.removeChild(sidebarList.firstChild);
-    // Display project name + tasks
-    sidebarNavHeader.textContent = project.name;
-    project.tasks.map((task) => this._renderTask(task));
-  }
-
-  _hideTasks() {
-    // Fade-in-out animation
-    containerSidebar.classList.remove("sidebar--expand--small");
-    containerSidebar.classList.add("hidden");
-    containerMenu.classList.remove("menu--shrink--large");
   }
 
   _showTaskForm() {
@@ -208,7 +250,7 @@ class App {
       return alert("Some fields are left empty. Please fill them in");
     const task = new Task(...arr);
     const project = this.#projects.find(
-      (pro) => pro.id === containerSidebar.dataset.id
+      (pro) => pro.id === sidebarLayer2.dataset.id
     );
     project.addTask(task);
     this._renderTask(task);
@@ -218,33 +260,15 @@ class App {
   _renderTask(task) {
     const html = `
     <li class="list__item">
-      <p class="list__label--banner--tag" style="background-color:${task.priority}"></p>
-      <p class="list__label--text">${task.title}</p>
-      <p class="list__label--banner--hero">${task.dueDate}</p>
-      <p class="list__label--text">${task.desc}</p>
+      <p class="list__label list__label--banner--tag" style="background-color:${task.priority}"></p>
+      <h2 class="list__label list__label--text">${task.title}</h2>
+      <p class="list__label list__label--banner--hero">${task.dueDate}</p>
+      <p class="list__label list__label--text">${task.desc}</p>
+      <button class="list__btn list__btn--delete">DELETE</button>
+      <button class="list__btn list__btn--edit">EDIT</button>
     </li>
     `;
     sidebarList.insertAdjacentHTML("beforeend", html);
-  }
-
-  _expandTasks(e) {
-    const target = e.target.closest(".list__item");
-    if (!target) return;
-    if (target.classList.contains("list__item")) {
-      containerSidebar.classList.add("sidebar--expand--large");
-      containerMenu.classList.remove("menu--shrink--large");
-      containerMenu.classList.add("menu--shrink--small");
-    }
-  }
-
-  _shrinkTasks(e) {
-    const target = e.target.closest(".list__item");
-    if (!target) return;
-    if (target.classList.contains("list__item")) {
-      containerSidebar.classList.remove("sidebar--expand--large");
-      containerMenu.classList.add("menu--shrink--large");
-      containerMenu.classList.remove("menu--shrink--small");
-    }
   }
 }
 
