@@ -90,7 +90,14 @@ class Project {
   }
 
   addTask(task) {
+    task.id = String(Date.now()).slice(-4);
     this.tasks.push(task);
+  }
+  removeTask(task) {
+    const index = this.tasks.indexOf(task);
+    if (index > -1) {
+      this.tasks.splice(index, 1);
+    }
   }
 }
 
@@ -114,6 +121,7 @@ class App {
     btnSubmitProject.addEventListener("click", this._newProject.bind(this));
     btnCloseModalProject.addEventListener("click", this._hideProjectForm);
     // --- Sidebar
+    sidebarList.addEventListener("click", this._taskClicked.bind(this));
     btnCloseSidebar.addEventListener("click", this._hideTasks.bind(this));
     btnCreateTask.addEventListener("click", this._showTaskForm.bind(this));
     btnSubmitTask.addEventListener("click", this._newTask.bind(this));
@@ -201,6 +209,23 @@ class App {
     overlay.classList.add("hidden");
   }
 
+  _taskClicked(e) {
+    const clicked = e.target;
+    if (!clicked) return;
+    if (clicked.classList.contains("list__btn--delete")) {
+      const listItem = clicked.closest(".list__item");
+      const project = this.#projects.find(
+        (pro) => pro.id === sidebarLayer2.dataset.id
+      );
+      const task = project.tasks.find(
+        (task) => task.id === listItem.dataset.id
+      );
+      project.removeTask(task);
+      sidebarList.removeChild(listItem);
+      console.log(project);
+    }
+  }
+
   _newTask(e) {
     e.preventDefault();
     const title = inputTitle.value;
@@ -222,7 +247,7 @@ class App {
 
   _renderTask(task) {
     const html = `
-    <li class="list__item">
+    <li class="list__item" data-id="${task.id}">
       <p class="list__label list__label--banner--tag" style="background-color:${task.priority}"></p>
       <h2 class="list__label list__label--text">${task.title}</h2>
       <p class="list__label list__label--banner--hero">${task.dueDate}</p>
