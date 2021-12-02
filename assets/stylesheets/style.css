@@ -30,7 +30,8 @@ iframe {
    height: auto;
 }
 :root {
-  --color-sidebar: #d6ffdf;
+  --color-sidebar-layer1: #f2ffd1;
+  --color-sidebar-layer2: #d6ffdf;
   --color-menu: #f7f7f7;
 }
 
@@ -43,6 +44,36 @@ iframe {
 
 /* General elements */
 
+/* Sidebar */
+.sidebar {
+  z-index: 10;
+  display: inline-block;
+  height: 100%;
+  overflow-y: auto;
+  transition: width 700ms;
+}
+.sidebar--expand {
+  width: 60%;
+}
+.sidebar__nav {
+  width: 100%;
+}
+.sidebar__header {
+  display: block;
+  margin: 5px 12px;
+  font-size: 1.9rem;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.sidebar__text {
+  display: block;
+  width: 90%;
+  margin: 1rem;
+  font-size: 1.8rem;
+}
+.sidebar__list {
+  margin: 1rem;
+}
 /* Nav */
 .nav {
   display: flex;
@@ -120,12 +151,14 @@ iframe {
   font-weight: 500;
 }
 .form__input {
+  max-width: 18rem;
   padding: 0.5rem 1.5rem;
   font-size: 1.2em;
   border: 1px solid black;
   border-radius: 0.5rem;
 }
 .form__input--color {
+  min-width: 6rem;
   width: 30%;
   height: 3rem;
   cursor: pointer;
@@ -151,6 +184,10 @@ iframe {
 /* Class Modifiers */
 .hidden {
   visibility: hidden;
+  opacity: 0;
+}
+.none {
+  display: none;
   opacity: 0;
 }
 .overlay {
@@ -203,63 +240,57 @@ iframe {
  */
 
 .main {
+  position: relative;
   width: 100%;
   height: 100%;
 }
 
 /* 
  *
- * Sidebar
+ * Sidebar Layer 1
  *
  *
  */
 
-.sidebar {
-  display: inline-block;
-  max-width: 22rem;
-  width: 0%;
-  height: 100%;
-  overflow-y: auto;
-  background-color: var(--color-sidebar);
-  transition: width 700ms;
-}
-.sidebar--expand--small {
-  width: 60%;
-}
-.sidebar--expand--large {
-  width: 80%;
-}
-.sidebar__nav {
+.sidebar--layer--1 {
   width: 100%;
-}
-.sidebar__header {
-  display: block;
-  margin: 5px 12px;
-  font-size: 1.9rem;
-  font-weight: 600;
-  text-decoration: underline;
-}
-.sidebar__list {
-  margin: 1rem;
+  height: 8rem;
+  background-color: var(--color-sidebar-layer1);
+  transition: all 400ms;
 }
 
 /* 
  *
- * Sidebar
+ * Sidebar Layer 2
+ *
+ *
+ */
+
+.sidebar--layer--2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 22rem;
+  background-color: var(--color-sidebar-layer2);
+}
+
+/* 
+ *
+ * Sidebar Layer 2
  *
  * * * Nav
  *
  *
  */
 
-.sidebar .nav__header {
+.sidebar--layer--2 .nav__header {
   flex-grow: 1;
   margin: 5px;
   font-size: 1.5rem;
   font-weight: 400;
   text-align: center;
 }
-.sidebar .nav__icon {
+.sidebar--layer--2 .nav__icon {
   display: inline-block;
   transform: scale(110%);
 }
@@ -273,13 +304,13 @@ iframe {
  *
  */
 
-.sidebar .list__item {
+.sidebar--layer--2 .list__item {
   position: relative;
   max-width: 18rem;
   width: 10rem;
   min-height: 8rem;
   max-height: 12rem;
-  padding: 1rem;
+  padding: 0.5rem;
   margin: 12px 0;
   overflow: hidden;
   font-size: 1rem;
@@ -289,12 +320,7 @@ iframe {
   border-radius: 5px;
   transition: all 700ms;
 }
-.sidebar .list__item:hover {
-  height: initial;
-  width: 90%;
-  transform: scale(110%);
-}
-.sidebar .list__label--banner--tag {
+.sidebar--layer--2 .list__label--banner--tag {
   position: absolute;
   top: 4px;
   right: 4px;
@@ -303,7 +329,7 @@ iframe {
   color: white;
   border-radius: 5px;
 }
-.sidebar .list__label--banner--hero {
+.sidebar--layer--2 .list__label--banner--hero {
   display: block;
   max-width: 8.5rem;
   width: 90%;
@@ -313,73 +339,52 @@ iframe {
   background-color: yellow;
   border-radius: 12px;
 }
-.sidebar .list__label--text {
+.sidebar--layer--2 .list__label--text {
   display: inline-block;
   width: 90%;
   min-height: 1rem;
   max-height: 1.5rem;
-  overflow-y: hidden;
+  overflow: hidden;
   font-size: 1em;
   font-weight: 400;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.sidebar .list__btn {
-  display: inline-block;
-  margin: 1rem 2px;
+.sidebar--layer--2 .list__btn {
+  margin: 1rem auto;
   text-align: center;
 }
 
 @media only screen and (min-width: 363px) {
-  .sidebar .list__item {
+  .sidebar--layer--2 .list__item {
     width: 12rem;
     max-height: 14rem;
   }
-  .sidebar .list__label--text {
+  .sidebar--layer--2 .list__label--text {
     display: block;
     max-width: initial;
     width: 100%;
     max-height: 2.5rem;
+    overflow: hidden;
     font-size: 1.1em;
   }
-  .sidebar .list__item > h2 {
+  .sidebar--layer--2 .list__item > h2 {
     width: 90%;
     margin: 0 auto;
     font-size: 1.6em;
     font-weight: 600;
   }
 }
-@media only screen and (min-width: 441px) {
-  .sidebar .list__item > h2 {
-    overflow: initial;
+@media only screen and (min-width: 500px) {
+  .sidebar--layer--2 .list__item:hover {
+    height: initial;
+    width: 70%;
+    transform: scale(110%);
   }
-  .sidebar .list__label--text {
+  .sidebar--layer--2 .list__label--text {
     text-overflow: ellipsis;
     white-space: pre-wrap;
   }
-}
-
-/* 
- *
- * Welcome
- *
- *
- */
-
-.sidebar--layer--1 {
-  position: fixed;
-  display: inline-block;
-  width: 22rem;
-  height: 100%;
-  overflow-y: auto;
-  background-color: #f2ffd1;
-  transition: width 700ms;
-}
-.sidebar--layer--1 .sidebar__text {
-  display: block;
-  width: 90%;
-  margin: 1rem;
-  font-size: 1.8rem;
 }
 
 /* 
@@ -390,21 +395,16 @@ iframe {
  */
 
 .menu {
+  z-index: 1;
   float: right;
   width: 100%;
   height: 100%;
   overflow-y: auto;
   background-color: var(--color-menu);
-  transition: width 700ms;
+  transition: width 700ms, height 700ms;
 }
-.menu--shrink--small {
-  width: 20%;
-}
-.menu--shrink--large {
-  width: 40%;
-}
-.menu--shrink--full {
-  width: calc(100% - 22rem);
+.menu--shrink {
+  width: max(40%, calc(100% - 22rem));
 }
 .menu__nav {
   width: 100%;
@@ -418,10 +418,9 @@ iframe {
   width: 100%;
 }
 
-@media only screen and (min-width: 587px) {
-  .menu {
-    grid-template-columns: repeat(2, 50%);
-    /* width: 100%; */
+@media only screen and (min-width: 796px) {
+  .menu__content {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -473,10 +472,11 @@ iframe {
   white-space: nowrap;
 }
 
-@media only screen and (min-width: 587px) {
+@media only screen and (min-width: 586px) {
   .menu .content__item {
     width: 12rem;
     height: 12rem;
+    margin: 1rem;
   }
   .menu .content__header {
     font-size: 1.5rem;
