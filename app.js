@@ -99,14 +99,11 @@ class Project {
 ///////////////////////////////////////////////
 
 class App {
-  #mainObserver;
   #projects = [];
   templateProject = new Project("Default", "#0000ff");
   templateTask = new Task("Template", "Welcome!", new Date(), "low-low");
 
   constructor() {
-    this.#mainObserver = new ResizeObserver(this._observeMain);
-    this.#mainObserver.observe(containerMain);
     this.templateProject.addTask(this.templateTask);
     this.#projects.push(this.templateProject);
     this._renderProject(this.templateProject);
@@ -121,44 +118,6 @@ class App {
     btnCreateTask.addEventListener("click", this._showTaskForm.bind(this));
     btnSubmitTask.addEventListener("click", this._newTask.bind(this));
     btnCloseModalTask.addEventListener("click", this._hideTaskForm);
-  }
-
-  _observeMain(entries) {
-    const [entry] = entries;
-    if (
-      entry.contentRect.width >= 587 ||
-      window.screen.width === window.innerWidth
-    ) {
-      containerMenu.classList.add("menu--shrink--full");
-      sidebarList.removeEventListener("mouseover", this._expandTask);
-      sidebarList.removeEventListener("mouseout", this._shrinkTask);
-    } else {
-      sidebarList.addEventListener("mouseover", this._expandTask);
-      sidebarList.addEventListener("mouseout", this._shrinkTask);
-    }
-    if (sidebarLayer2.classList.contains("hidden")) {
-      sidebarLayer1.classList.remove("hidden");
-    }
-  }
-
-  _expandTask(e) {
-    const target = e.target.closest(".list__item");
-    if (!target) return;
-    if (target.classList.contains("list__item")) {
-      sidebarLayer2.classList.add("sidebar--expand--large");
-      containerMenu.classList.remove("menu--shrink--large");
-      containerMenu.classList.add("menu--shrink--small");
-    }
-  }
-
-  _shrinkTask(e) {
-    const target = e.target.closest(".list__item");
-    if (!target) return;
-    if (target.classList.contains("list__item")) {
-      sidebarLayer2.classList.remove("sidebar--expand--large");
-      containerMenu.classList.add("menu--shrink--large");
-      containerMenu.classList.remove("menu--shrink--small");
-    }
   }
 
   _showProjectForm() {
@@ -179,12 +138,16 @@ class App {
       this._showTasks.call(this, clicked);
   }
 
-  _showTasks(div) {
+  _expandSidebar() {
     // Fade-in-out animation
-    sidebarLayer2.classList.add("sidebar--expand--small");
+    sidebarLayer1.classList.add("none");
     sidebarLayer2.classList.remove("hidden");
-    containerMenu.classList.add("menu--shrink--large");
-    sidebarLayer1.classList.add("hidden");
+    sidebarLayer2.classList.add("sidebar--expand");
+    containerMenu.classList.add("menu--shrink");
+  }
+
+  _showTasks(div) {
+    this._expandSidebar();
     // Find project
     const project = this.#projects.find((pro) => pro.id === div.dataset.id);
     sidebarLayer2.dataset.id = project.id;
@@ -198,9 +161,9 @@ class App {
 
   _hideTasks() {
     // Fade-in-out animation
-    sidebarLayer2.classList.remove("sidebar--expand--small");
+    sidebarLayer2.classList.remove("sidebar--expand");
     sidebarLayer2.classList.add("hidden");
-    containerMenu.classList.remove("menu--shrink--large");
+    containerMenu.classList.remove("menu--shrink");
   }
 
   _newProject(e) {
