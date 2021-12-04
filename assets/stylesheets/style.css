@@ -169,6 +169,9 @@ iframe {
   padding: 5px;
   font-size: 1rem;
 }
+.form__select {
+  max-width: 12rem;
+}
 .form__btn {
   padding: 1.25rem 4.5rem;
   margin-top: 1rem;
@@ -315,7 +318,7 @@ iframe {
   overflow: hidden;
   font-size: 1rem;
   text-align: center;
-  cursor: pointer;
+  cursor: default;
   background-color: white;
   border-radius: 5px;
   transition: all 700ms;
@@ -353,12 +356,22 @@ iframe {
 .sidebar--layer--2 .list__btn {
   margin: 1rem auto;
   text-align: center;
+  cursor: pointer;
+}
+.sidebar--layer--2 .list__btn:hover {
+  background-color: whitesmoke;
 }
 
 @media only screen and (min-width: 363px) {
   .sidebar--layer--2 .list__item {
     width: 12rem;
     max-height: 14rem;
+  }
+  .sidebar--layer--2 .list__item > h2 {
+    width: 90%;
+    margin: 0 auto;
+    font-size: 1.6em;
+    font-weight: 600;
   }
   .sidebar--layer--2 .list__label--text {
     display: block;
@@ -367,12 +380,6 @@ iframe {
     max-height: 2.5rem;
     overflow: hidden;
     font-size: 1.1em;
-  }
-  .sidebar--layer--2 .list__item > h2 {
-    width: 90%;
-    margin: 0 auto;
-    font-size: 1.6em;
-    font-weight: 600;
   }
 }
 @media only screen and (min-width: 500px) {
