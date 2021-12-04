@@ -6,24 +6,23 @@
 
 // Parents
 const containerMain = document.querySelector(".main");
-const sidebarLayer1 = document.querySelector(".sidebar--layer--1");
-const sidebarLayer2 = document.querySelector(".sidebar--layer--2");
+const containerSidebar = document.querySelector(".sidebar");
 const sidebarList = document.querySelector(".sidebar__list");
 const containerMenu = document.querySelector(".menu");
 const menuContent = document.querySelector(".menu__content");
-const modalProject = document.querySelector(".modal-project");
-const modalTask = document.querySelector(".modal-task");
+const popupOnLoad = document.querySelector(".popup--onload");
+const modalProject = document.querySelector(".project");
+const modalTask = document.querySelector(".task");
 const overlay = document.querySelector(".overlay");
 // Buttons
 // --- Menu
-const btnCreateProject = containerMenu.querySelector(".nav__btn--add");
-const btnCloseModalProject = modalProject.querySelector(".modal__btn--close");
+const btnModalProjectClose = modalProject.querySelector(".modal__btn--close");
+const btnAddProject = containerMenu.querySelector(".nav__btn--add");
 const btnSubmitProject = modalProject.querySelector(".form__btn--submit");
 // --- Sidebar
-const sidebarNavHeader = sidebarLayer2.querySelector(".nav__header");
-const btnCloseSidebar = sidebarLayer2.querySelector(".nav__btn--close");
-const btnCreateTask = sidebarLayer2.querySelector(".nav__btn--add");
-const btnCloseModalTask = modalTask.querySelector(".modal__btn--close");
+const btnSidebarClose = containerSidebar.querySelector(".nav__btn--close");
+const btnModalTaskClose = modalTask.querySelector(".modal__btn--close");
+const btnAddTask = containerSidebar.querySelector(".nav__btn--add");
 const btnSubmitTask = modalTask.querySelector(".form__btn--submit");
 // Inputs
 // --- Menu
@@ -35,7 +34,8 @@ const inputDesc = modalTask.querySelector(".form__input--text--desc");
 const inputDate = modalTask.querySelector(".form__input--date");
 const inputPriority = modalTask.querySelector(".form__select--priority");
 // Labels
-const labelTaskForm = modalTask.querySelector(".modal__header");
+const labelSidebarNavHeader = containerSidebar.querySelector(".nav__header");
+const labelModalTaskHeader = modalTask.querySelector(".modal__header");
 
 ////////////////////////////////////////////////
 ////// Task Contructor
@@ -61,6 +61,7 @@ class Task {
   }
 
   _formatDate(date) {
+    let due;
     const formatDate = new Date(date);
     const calcDaysAhead = (d1, d2) =>
       Math.round(Math.abs(d1 - d2) / (1000 * 60 * 60 * 24));
@@ -68,27 +69,36 @@ class Task {
       new Date().setHours(0, 0, 0, 0),
       formatDate
     );
-    if (daysAhead === 0) return (this.due = "Today");
-    if (formatDate < new Date()) return (this.due = "Expired");
-    if (daysAhead === 1) return (this.due = "Tommorow");
-    if (daysAhead > 1 && daysAhead <= 7)
-      return (this.due = `${daysAhead} days`);
-    if (daysAhead > 7 && daysAhead <= 30)
-      return (this.due = `${daysAhead % 7} weeks`);
-    return (this.due = date);
+    if (daysAhead === 0) due = "Today";
+    if (formatDate < new Date().setHours(0, 0, 0, 0)) due = "Expired";
+    if (daysAhead === 1) due = "Tommorow";
+    if (daysAhead > 1 && daysAhead <= 13) due = `${daysAhead} days`;
+    if (daysAhead > 13 && daysAhead <= 55)
+      due = `${Math.round(daysAhead / 7)} weeks`;
+    if (daysAhead > 55 && daysAhead <= 365)
+      due = `${Math.round(daysAhead / 28)} months`;
+    this.due = due ? due : date;
+    return this.due;
   }
 
   _formatPriority(priority) {
+    let color;
     switch (priority) {
       case "low-low":
-        return (this.color = "lightgreen");
+        color = "lightgreen";
+        break;
       case "low-high":
-        return (this.color = "yellow");
+        color = "yellow";
+        break;
       case "high-low":
-        return (this.color = "orange");
+        color = "orange";
+        break;
       case "high-high":
-        return (this.color = "red");
+        color = "red";
+        break;
     }
+    this.color = color ? color : "white";
+    return this.color;
   }
 }
 
@@ -133,70 +143,82 @@ class App {
   );
 
   constructor() {
+    // Add event handlers
+    window.addEventListener("load", this._onload.bind(this));
+    // --- Menu
+    menuContent.addEventListener("click", this._showTasks.bind(this));
+    btnAddProject.addEventListener("click", this._showModalProject);
+    btnSubmitProject.addEventListener("click", this._newProject.bind(this));
+    btnModalProjectClose.addEventListener("click", this._hideModalProject);
+    // --- Sidebar
+    sidebarList.addEventListener("click", this._handleTask.bind(this));
+    btnSidebarClose.addEventListener("click", this._hideTasks.bind(this));
+    btnAddTask.addEventListener("click", this._showTaskForm.bind(this, "new"));
+    btnModalTaskClose.addEventListener("click", this._hideTaskForm);
+  }
+
+  _onload() {
     this.templateProject.addTask(this.templateTask);
     this.#projects.push(this.templateProject);
     this._renderProject(this.templateProject);
-    // Add event handlers
-    // --- Menu
-    menuContent.addEventListener("click", this._showProject.bind(this));
-    btnCreateProject.addEventListener("click", this._showProjectForm);
-    btnSubmitProject.addEventListener("click", this._newProject.bind(this));
-    btnCloseModalProject.addEventListener("click", this._hideProjectForm);
-    // --- Sidebar
-    sidebarList.addEventListener("click", this._taskClicked.bind(this));
-    btnCloseSidebar.addEventListener("click", this._hideTasks.bind(this));
-    btnCreateTask.addEventListener(
-      "click",
-      this._showTaskForm.bind(this, "new")
-    );
-    btnCloseModalTask.addEventListener("click", this._hideTaskForm);
+    popupOnLoad.classList.remove("hidden");
   }
 
-  _hideProjectForm() {
+  /////////////////////////////////////
+  //////////// Helper functions
+
+  _findProject(el) {
+    const project = this.#projects.find((pro) => pro.id === el.dataset.id);
+    return project;
+  }
+  _findTask(project, el) {
+    const task = project.tasks.find((task) => task.id === el.dataset.id);
+    return task;
+  }
+
+  /////////////////////////////////////
+  //////////// Project form
+
+  _hideModalProject() {
     inputName.value = "";
     modalProject.classList.add("hidden");
     overlay.classList.add("hidden");
   }
-
-  _showProjectForm() {
+  _showModalProject() {
     modalProject.classList.remove("hidden");
     overlay.classList.remove("hidden");
   }
 
-  _showProject(e) {
+  /////////////////////////////////////
+  //////////// Project interaction
+
+  _hideTasks() {
+    // Cascades sidebar
+    containerSidebar.classList.remove("sidebar--expand");
+    containerSidebar.classList.add("hidden");
+    containerMenu.classList.remove("menu--shrink");
+  }
+  _showTasks(e) {
     const clicked = e.target.closest(".content__item");
     if (!clicked) return;
-    if (clicked.classList.contains("content__item"))
-      this._showTasks.call(this, clicked);
-  }
-
-  _expandSidebar() {
-    // Fade-in-out animation
-    sidebarLayer1.classList.add("none");
-    sidebarLayer2.classList.remove("hidden");
-    sidebarLayer2.classList.add("sidebar--expand");
+    // Expands sidebar
+    popupOnLoad.classList.add("hidden");
+    containerSidebar.classList.remove("hidden");
+    containerSidebar.classList.add("sidebar--expand");
     containerMenu.classList.add("menu--shrink");
-  }
-
-  _showTasks(div) {
-    this._expandSidebar();
     // Find project
-    const project = this.#projects.find((pro) => pro.id === div.dataset.id);
-    sidebarLayer2.dataset.id = project.id;
+    const project = this._findProject(clicked);
+    containerSidebar.dataset.id = project.id;
     // Clear sidebar
     while (sidebarList.firstChild)
       sidebarList.removeChild(sidebarList.firstChild);
     // Display project name + tasks
-    sidebarNavHeader.textContent = project.name;
+    labelSidebarNavHeader.textContent = project.name;
     project.tasks.map((task) => this._renderTask(task));
   }
 
-  _hideTasks() {
-    // Fade-in-out animation
-    sidebarLayer2.classList.remove("sidebar--expand");
-    sidebarLayer2.classList.add("hidden");
-    containerMenu.classList.remove("menu--shrink");
-  }
+  /////////////////////////////////////
+  //////////// Project creation
 
   _newProject(e) {
     e.preventDefault();
@@ -207,9 +229,8 @@ class App {
     const project = new Project(...desc);
     this.#projects.push(project);
     this._renderProject(project);
-    this._hideProjectForm();
+    this._hideModalProject();
   }
-
   _renderProject(project) {
     const html = `
     <div class="content__item" data-id="${project.id}" style="background-color: ${project.color}">
@@ -219,16 +240,18 @@ class App {
     menuContent.insertAdjacentHTML("beforeend", html);
   }
 
+  /////////////////////////////////////
+  //////////// Task form
+
   _hideTaskForm() {
     modalTask.classList.add("hidden");
     overlay.classList.add("hidden");
   }
-
   _showTaskForm(type) {
     if (!this.#projects.length)
       return alert("You have not created any projects yet!");
     if (type === "new") {
-      labelTaskForm.textContent = "New Task";
+      labelModalTaskHeader.textContent = "New Task";
       btnSubmitTask.textContent = "Create!";
       // prettier-ignore
       inputTitle.value = inputDesc.value = inputDate.value = inputPriority.value = "";
@@ -236,14 +259,10 @@ class App {
       btnSubmitTask.addEventListener("click", this._newTask.bind(this));
     }
     if (type === "edit") {
-      labelTaskForm.textContent = "Edit Task";
+      const project = this._findProject(containerSidebar);
+      const task = this._findTask(project, this.#currTask);
+      labelModalTaskHeader.textContent = "Edit Task";
       btnSubmitTask.textContent = "Save Changes!";
-      const project = this.#projects.find(
-        (pro) => pro.id === sidebarLayer2.dataset.id
-      );
-      const task = project.tasks.find(
-        (task) => task.id === this.#currTask.dataset.id
-      );
       inputTitle.value = task.title;
       inputDesc.value = task.desc;
       inputDate.value = task.date;
@@ -255,17 +274,16 @@ class App {
     overlay.classList.remove("hidden");
   }
 
-  _taskClicked(e) {
+  /////////////////////////////////////
+  //////////// Task interaction
+
+  _handleTask(e) {
     const clicked = e.target;
     if (!clicked) return;
     const listItem = clicked.closest(".list__item");
     if (clicked.classList.contains("list__btn--delete")) {
-      const project = this.#projects.find(
-        (pro) => pro.id === sidebarLayer2.dataset.id
-      );
-      const task = project.tasks.find(
-        (task) => task.id === listItem.dataset.id
-      );
+      const project = this._findProject(containerSidebar);
+      const task = this._findTask(project, listItem);
       project.removeTask(task);
       sidebarList.removeChild(listItem);
     }
@@ -274,7 +292,6 @@ class App {
       this._showTaskForm("edit");
     }
   }
-
   _updateTask(e) {
     e.preventDefault();
     const title = inputTitle.value;
@@ -282,18 +299,19 @@ class App {
     const date = inputDate.value;
     const priority = inputPriority.value;
     const arr = [title, desc, date, priority];
-    const project = this.#projects.find(
-      (pro) => pro.id === sidebarLayer2.dataset.id
-    );
-    const task = project.tasks.find(
-      (task) => task.id === this.#currTask.dataset.id
-    );
+    const project = this._findProject(containerSidebar);
+    const task = this._findTask(project, this.#currTask);
     task._updateTask(...arr);
     this._renderTask(task, true);
     this._hideTaskForm();
   }
 
+  /////////////////////////////////////
+  //////////// Task creation
+
   _newTask(e) {
+    // Helper functions
+    const validInputs = (...ipts) => ipts.some((ipt) => !ipt);
     e.preventDefault();
     const title = inputTitle.value;
     const desc = inputDesc.value;
@@ -301,18 +319,15 @@ class App {
     const priority = inputPriority.value;
     const arr = [title, desc, date, priority];
     // Checking for empty fields
-    if (arr.some((ipt) => !ipt))
-      return alert("Some fields are left empty. Please fill them in");
+    if (validInputs(arr))
+      return alert("Some fields are left empty! Please fill them in");
     const task = new Task(...arr);
-    const project = this.#projects.find(
-      (pro) => pro.id === sidebarLayer2.dataset.id
-    );
+    const project = this._findProject(containerSidebar);
     project.addTask(task);
     this._renderTask(task);
     this._hideTaskForm();
   }
-
-  _renderTask(task, edit) {
+  _renderTask(task, edit = false) {
     const html = `
     <p class="list__label list__label--banner--tag" style="background-color:${task.color}"></p>
     <h2 class="list__label list__label--text">${task.title}</h2>
