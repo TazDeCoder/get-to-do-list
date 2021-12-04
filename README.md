@@ -6,12 +6,13 @@ Get Your Priorities Straight, and Start Living Intentionally
 
 **Features:**
 
-**_None at the moment, but are coming soon :)_**
+- **NEW**: Modern GUI
+- **NEW**: Intuitive Design
 
 **TASK-LIST:**
 
-- [ ] Modern GUI
-- [ ] Intuitive Design
+- [x] Modern GUI
+- [x] Intuitive Design
 - [ ] Cover Image (projects)
 - [ ] Interactive Checklist
 
