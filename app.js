@@ -34,44 +34,60 @@ const inputTitle = modalTask.querySelector(".form__input--text--title");
 const inputDesc = modalTask.querySelector(".form__input--text--desc");
 const inputDate = modalTask.querySelector(".form__input--date");
 const inputPriority = modalTask.querySelector(".form__select--priority");
+// Labels
+const labelTaskForm = modalTask.querySelector(".modal__header");
 
 ////////////////////////////////////////////////
 ////// Task Contructor
 ///////////////////////////////////////////////
 
 class Task {
-  constructor(title, desc, dueDate, priority) {
+  constructor(title, desc, date, priority) {
     this.title = title;
     this.desc = desc;
-    this._formatDueDate(dueDate);
+    this.date = date;
+    this.priority = priority;
+    this._formatDate(date);
     this._formatPriority(priority);
   }
 
-  _formatDueDate(dueDate) {
-    const formatDate = new Date(dueDate);
-    const calcDaysAhead = (date1, date2) =>
-      Math.round(Math.abs(date1 - date2) / (1000 * 60 * 60 * 24));
-    const daysAhead = calcDaysAhead(new Date(), formatDate);
-    if (daysAhead === 0) return (this.dueDate = "Today");
-    if (formatDate < new Date()) return (this.dueDate = "Expired");
-    if (daysAhead === 1) return (this.dueDate = "Tommorow");
+  _updateTask(title, desc, date, priority) {
+    this.title = title;
+    this.desc = desc;
+    this.date = date;
+    this.priority = priority;
+    this._formatDate(date);
+    this._formatPriority(priority);
+  }
+
+  _formatDate(date) {
+    const formatDate = new Date(date);
+    const calcDaysAhead = (d1, d2) =>
+      Math.round(Math.abs(d1 - d2) / (1000 * 60 * 60 * 24));
+    const daysAhead = calcDaysAhead(
+      new Date().setHours(0, 0, 0, 0),
+      formatDate
+    );
+    if (daysAhead === 0) return (this.due = "Today");
+    if (formatDate < new Date()) return (this.due = "Expired");
+    if (daysAhead === 1) return (this.due = "Tommorow");
     if (daysAhead > 1 && daysAhead <= 7)
-      return (this.dueDate = `${daysAhead} days`);
+      return (this.due = `${daysAhead} days`);
     if (daysAhead > 7 && daysAhead <= 30)
-      return (this.dueDate = `${daysAhead % 7} weeks`);
-    return (this.dueDate = dueDate);
+      return (this.due = `${daysAhead % 7} weeks`);
+    return (this.due = date);
   }
 
   _formatPriority(priority) {
     switch (priority) {
       case "low-low":
-        return (this.priority = "lightgreen");
+        return (this.color = "lightgreen");
       case "low-high":
-        return (this.priority = "yellow");
+        return (this.color = "yellow");
       case "high-low":
-        return (this.priority = "orange");
+        return (this.color = "orange");
       case "high-high":
-        return (this.priority = "red");
+        return (this.color = "red");
     }
   }
 }
@@ -106,9 +122,15 @@ class Project {
 ///////////////////////////////////////////////
 
 class App {
+  #currTask;
   #projects = [];
   templateProject = new Project("Default", "#0000ff");
-  templateTask = new Task("Template", "Welcome!", new Date(), "low-low");
+  templateTask = new Task(
+    "Template",
+    "Welcome!",
+    new Date().setHours(0, 0, 0, 0),
+    "low-low"
+  );
 
   constructor() {
     this.templateProject.addTask(this.templateTask);
@@ -123,20 +145,22 @@ class App {
     // --- Sidebar
     sidebarList.addEventListener("click", this._taskClicked.bind(this));
     btnCloseSidebar.addEventListener("click", this._hideTasks.bind(this));
-    btnCreateTask.addEventListener("click", this._showTaskForm.bind(this));
-    btnSubmitTask.addEventListener("click", this._newTask.bind(this));
+    btnCreateTask.addEventListener(
+      "click",
+      this._showTaskForm.bind(this, "new")
+    );
     btnCloseModalTask.addEventListener("click", this._hideTaskForm);
-  }
-
-  _showProjectForm() {
-    modalProject.classList.remove("hidden");
-    overlay.classList.remove("hidden");
   }
 
   _hideProjectForm() {
     inputName.value = "";
     modalProject.classList.add("hidden");
     overlay.classList.add("hidden");
+  }
+
+  _showProjectForm() {
+    modalProject.classList.remove("hidden");
+    overlay.classList.remove("hidden");
   }
 
   _showProject(e) {
@@ -195,25 +219,47 @@ class App {
     menuContent.insertAdjacentHTML("beforeend", html);
   }
 
-  _showTaskForm() {
-    if (!this.#projects.length)
-      return alert("You have not created any projects yet!");
-    modalTask.classList.remove("hidden");
-    overlay.classList.remove("hidden");
-  }
-
   _hideTaskForm() {
-    // prettier-ignore
-    inputTitle.value = inputDesc.value = inputDate.value = inputPriority.value = "";
     modalTask.classList.add("hidden");
     overlay.classList.add("hidden");
+  }
+
+  _showTaskForm(type) {
+    if (!this.#projects.length)
+      return alert("You have not created any projects yet!");
+    if (type === "new") {
+      labelTaskForm.textContent = "New Task";
+      btnSubmitTask.textContent = "Create!";
+      // prettier-ignore
+      inputTitle.value = inputDesc.value = inputDate.value = inputPriority.value = "";
+      btnSubmitTask.removeEventListener("click", this._updateTask.bind(this));
+      btnSubmitTask.addEventListener("click", this._newTask.bind(this));
+    }
+    if (type === "edit") {
+      labelTaskForm.textContent = "Edit Task";
+      btnSubmitTask.textContent = "Save Changes!";
+      const project = this.#projects.find(
+        (pro) => pro.id === sidebarLayer2.dataset.id
+      );
+      const task = project.tasks.find(
+        (task) => task.id === this.#currTask.dataset.id
+      );
+      inputTitle.value = task.title;
+      inputDesc.value = task.desc;
+      inputDate.value = task.date;
+      inputPriority.value = task.priority;
+      btnSubmitTask.removeEventListener("click", this._newTask.bind(this));
+      btnSubmitTask.addEventListener("click", this._updateTask.bind(this));
+    }
+    modalTask.classList.remove("hidden");
+    overlay.classList.remove("hidden");
   }
 
   _taskClicked(e) {
     const clicked = e.target;
     if (!clicked) return;
+    const listItem = clicked.closest(".list__item");
     if (clicked.classList.contains("list__btn--delete")) {
-      const listItem = clicked.closest(".list__item");
       const project = this.#projects.find(
         (pro) => pro.id === sidebarLayer2.dataset.id
       );
@@ -222,17 +268,38 @@ class App {
       );
       project.removeTask(task);
       sidebarList.removeChild(listItem);
-      console.log(project);
     }
+    if (clicked.classList.contains("list__btn--edit")) {
+      this.#currTask = listItem;
+      this._showTaskForm("edit");
+    }
+  }
+
+  _updateTask(e) {
+    e.preventDefault();
+    const title = inputTitle.value;
+    const desc = inputDesc.value;
+    const date = inputDate.value;
+    const priority = inputPriority.value;
+    const arr = [title, desc, date, priority];
+    const project = this.#projects.find(
+      (pro) => pro.id === sidebarLayer2.dataset.id
+    );
+    const task = project.tasks.find(
+      (task) => task.id === this.#currTask.dataset.id
+    );
+    task._updateTask(...arr);
+    this._renderTask(task, true);
+    this._hideTaskForm();
   }
 
   _newTask(e) {
     e.preventDefault();
     const title = inputTitle.value;
     const desc = inputDesc.value;
-    const dueDate = inputDate.value;
+    const date = inputDate.value;
     const priority = inputPriority.value;
-    const arr = [title, desc, dueDate, priority];
+    const arr = [title, desc, date, priority];
     // Checking for empty fields
     if (arr.some((ipt) => !ipt))
       return alert("Some fields are left empty. Please fill them in");
@@ -245,18 +312,24 @@ class App {
     this._hideTaskForm();
   }
 
-  _renderTask(task) {
+  _renderTask(task, edit) {
     const html = `
-    <li class="list__item" data-id="${task.id}">
-      <p class="list__label list__label--banner--tag" style="background-color:${task.priority}"></p>
-      <h2 class="list__label list__label--text">${task.title}</h2>
-      <p class="list__label list__label--banner--hero">${task.dueDate}</p>
-      <p class="list__label list__label--text">${task.desc}</p>
-      <button class="list__btn list__btn--delete">DELETE</button>
-      <button class="list__btn list__btn--edit">EDIT</button>
-    </li>
+    <p class="list__label list__label--banner--tag" style="background-color:${task.color}"></p>
+    <h2 class="list__label list__label--text">${task.title}</h2>
+    <p class="list__label list__label--banner--hero">${task.due}</p>
+    <p class="list__label list__label--text">${task.desc}</p>
+    <button class="list__btn list__btn--delete">DELETE</button>
+    <button class="list__btn list__btn--edit">EDIT</button>
     `;
-    sidebarList.insertAdjacentHTML("beforeend", html);
+    if (edit) {
+      this.#currTask.innerHTML = html;
+      return;
+    }
+    const listItem = document.createElement("li");
+    listItem.classList.add("list__item");
+    listItem.dataset.id = task.id;
+    listItem.innerHTML = html;
+    sidebarList.insertAdjacentElement("beforeend", listItem);
   }
 }
 
