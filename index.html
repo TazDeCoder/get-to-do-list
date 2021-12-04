@@ -26,24 +26,17 @@
     <header class="head">
       <nav class="head__nav nav">
         <a
-          class="link"
           href="https://www.iconfinder.com/paomedia"
           title="Link to Designer"
           target="_blank"
         >
-          <img class="logo" src="./assets/images/notepad_icon.png" />
+          <img src="./assets/images/notepad_icon.png" />
         </a>
         <h1 class="nav__header">To-Do-List</h1>
       </nav>
     </header>
     <main class="main">
-      <div class="sidebar sidebar--layer--1">
-        <div class="sidebar__header">Hello!</div>
-        <div class="sidebar__text">
-          <p>Click on a project to get started!</p>
-        </div>
-      </div>
-      <div class="sidebar sidebar--layer--2 hidden">
+      <div class="sidebar hidden">
         <nav class="sidebar__nav nav">
           <h2 class="nav__header"></h2>
           <button class="nav__btn nav__btn--add">
@@ -66,7 +59,13 @@
         <div class="menu__content content"></div>
       </div>
     </main>
-    <div class="modal modal-project hidden">
+    <div class="popup popup--onload hidden">
+      <div class="popup__header">Hey, there!</div>
+      <div class="popup__text">
+        <p>Click on a project to get started</p>
+      </div>
+    </div>
+    <div class="modal project hidden">
       <button class="modal__btn modal__btn--close">&times;</button>
       <h2 class="modal__header">New Project</h2>
       <form class="form form--grid">
@@ -77,7 +76,7 @@
         <button class="form__btn form__btn--submit">Create!</button>
       </form>
     </div>
-    <div class="modal modal-task hidden">
+    <div class="modal task hidden">
       <button class="modal__btn modal__btn--close">&times;</button>
       <h2 class="modal__header"></h2>
       <form class="form form--grid">
@@ -90,12 +89,10 @@
         <label class="form__label">Priority</label>
         <select class="form__select form__select--priority">
           <option class="form__option" value=""></option>
-          <option class="form__option" value="low-low">Low (not urgent)</option>
-          <option class="form__option" value="low-high">Low (urgent)</option>
-          <option class="form__option" value="high-low">
-            High (not urgent)
-          </option>
-          <option class="form__option" value="high-high">High (urgent)</option>
+          <option class="form__option" value="low-low">Least urgent</option>
+          <option class="form__option" value="low-high">Not urgent</option>
+          <option class="form__option" value="high-low">Quite urgent</option>
+          <option class="form__option" value="high-high">Most urgent</option>
         </select>
         <button class="form__btn form__btn--submit"></button>
       </form>
