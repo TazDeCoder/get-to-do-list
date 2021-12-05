@@ -284,7 +284,7 @@ iframe {
   overflow: hidden;
   font-size: 1rem;
   text-align: center;
-  cursor: default;
+  cursor: pointer;
   background-color: white;
   border-radius: 5px;
   transition: all 700ms;
@@ -294,7 +294,6 @@ iframe {
   top: 4px;
   right: 4px;
   padding: 9px;
-  font-weight: 600;
   color: white;
   border-radius: 5px;
 }
@@ -469,12 +468,91 @@ iframe {
 
 /* 
  *
+ * Aside Top
+ *
+ *
+ */
+
+.aside--top {
+  position: fixed;
+  top: 5rem;
+  right: 5rem;
+  width: 15rem;
+  height: 3.5rem;
+  padding: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  visibility: hidden;
+  background-color: whitesmoke;
+  border: 2px solid black;
+  border-radius: 12px;
+  opacity: 0;
+  transition: height 700ms;
+}
+.aside--top:hover {
+  background-color: #e6e6e6;
+}
+.aside--expand {
+  height: 12rem;
+  overflow: auto;
+}
+.aside__header {
+  font-size: 1.4rem;
+  text-decoration: underline;
+}
+.aside__list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+}
+
+@media only screen and (min-width: 796px) {
+  .aside--top {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+/* 
+ *
+ * Aside Top
+ *
+ * * * List
+ * 
+ *
+ */
+
+.aside .list__item {
+  position: relative;
+  width: 12rem;
+  padding: 0.5rem;
+  margin: 5px 0;
+  overflow: hidden;
+  font-size: 1rem;
+  list-style: none;
+  background-color: white;
+  border-radius: 5px;
+  transition: opacity 700ms;
+}
+.aside .list__input--checkbox {
+  position: absolute;
+  top: 6px;
+  right: 4px;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* 
+ *
  * Popup Onload
  *
  *
  */
 
 .popup--onload {
+  z-index: 100;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -488,4 +566,39 @@ iframe {
 }
 .popup__text {
   margin: 0.5rem;
+}
+
+/* 
+ *
+ * Popup Sidebar
+ *
+ *
+ */
+
+.popup--sidebar {
+  z-index: 100;
+  position: fixed;
+  top: 11rem;
+  left: 1rem;
+  width: 25%;
+  height: 12rem;
+  padding: 1rem;
+  background-color: var(--color-popup);
+  transition: all 200ms;
+}
+
+/* 
+ *
+ * Popup Sidebar
+ *
+ * * * Text
+ * 
+ *
+ */
+
+.popup--sidebar .text {
+  margin: 1rem;
+}
+.popup--sidebar .text__label {
+  margin-top: 0.5rem;
 }
