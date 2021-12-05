@@ -5,12 +5,15 @@
 ///////////////////////////////////////////////
 
 // Parents
+const checklistBox = document.querySelector(".aside--top");
+const checklist = document.querySelector(".aside__list");
 const containerMain = document.querySelector(".main");
 const containerSidebar = document.querySelector(".sidebar");
 const sidebarList = document.querySelector(".sidebar__list");
 const containerMenu = document.querySelector(".menu");
 const menuContent = document.querySelector(".menu__content");
-const popupOnLoad = document.querySelector(".popup--onload");
+const popupSidebar = document.querySelector(".popup--sidebar");
+const popupOnload = document.querySelector(".popup--onload");
 const modalProject = document.querySelector(".project");
 const modalTask = document.querySelector(".task");
 const overlay = document.querySelector(".overlay");
@@ -51,7 +54,7 @@ class Task {
     this._formatPriority(priority);
   }
 
-  _updateTask(title, desc, date, priority) {
+  _editTask(title, desc, date, priority) {
     this.title = title;
     this.desc = desc;
     this.date = date;
@@ -132,36 +135,35 @@ class Project {
 ///////////////////////////////////////////////
 
 class App {
-  #currTask;
+  #currListItem;
   #projects = [];
   templateProject = new Project("Default", "#0000ff");
-  templateTask = new Task(
-    "Template",
-    "Welcome!",
-    new Date().setHours(0, 0, 0, 0),
-    "low-low"
-  );
 
   constructor() {
     // Add event handlers
     window.addEventListener("load", this._onload.bind(this));
+    // --- Checklist
+    checklistBox.addEventListener("drop", this._handleTaskDrop.bind(this));
+    checklistBox.addEventListener("dragover", this._handleTaskDrop);
+    checklistBox.addEventListener("input", this._handleTaskInput.bind(this));
+    checklistBox.addEventListener("click", this._toggleChecklist);
     // --- Menu
     menuContent.addEventListener("click", this._showTasks.bind(this));
     btnAddProject.addEventListener("click", this._showModalProject);
     btnSubmitProject.addEventListener("click", this._newProject.bind(this));
     btnModalProjectClose.addEventListener("click", this._hideModalProject);
     // --- Sidebar
-    sidebarList.addEventListener("click", this._handleTask.bind(this));
+    sidebarList.addEventListener("dragstart", this._handleTaskDrag);
+    sidebarList.addEventListener("click", this._handleTaskClick.bind(this));
     btnSidebarClose.addEventListener("click", this._hideTasks.bind(this));
     btnAddTask.addEventListener("click", this._showTaskForm.bind(this, "new"));
     btnModalTaskClose.addEventListener("click", this._hideTaskForm);
   }
 
   _onload() {
-    this.templateProject.addTask(this.templateTask);
     this.#projects.push(this.templateProject);
     this._renderProject(this.templateProject);
-    popupOnLoad.classList.remove("hidden");
+    popupOnload.classList.remove("hidden");
   }
 
   /////////////////////////////////////
@@ -185,6 +187,7 @@ class App {
     overlay.classList.add("hidden");
   }
   _showModalProject() {
+    popupOnload.classList.add("hidden");
     modalProject.classList.remove("hidden");
     overlay.classList.remove("hidden");
   }
@@ -194,6 +197,7 @@ class App {
 
   _hideTasks() {
     // Cascades sidebar
+    popupSidebar.classList.add("hidden");
     containerSidebar.classList.remove("sidebar--expand");
     containerSidebar.classList.add("hidden");
     containerMenu.classList.remove("menu--shrink");
@@ -202,13 +206,15 @@ class App {
     const clicked = e.target.closest(".content__item");
     if (!clicked) return;
     // Expands sidebar
-    popupOnLoad.classList.add("hidden");
+    popupOnload.classList.add("hidden");
+    popupSidebar.classList.remove("hidden");
     containerSidebar.classList.remove("hidden");
     containerSidebar.classList.add("sidebar--expand");
     containerMenu.classList.add("menu--shrink");
     // Find project
     const project = this._findProject(clicked);
     containerSidebar.dataset.id = project.id;
+    if (project.tasks.length) popupSidebar.classList.add("hidden");
     // Clear sidebar
     while (sidebarList.firstChild)
       sidebarList.removeChild(sidebarList.firstChild);
@@ -248,36 +254,49 @@ class App {
     overlay.classList.add("hidden");
   }
   _showTaskForm(type) {
+    // type can be either "new" or "edit"
     if (!this.#projects.length)
       return alert("You have not created any projects yet!");
+    popupSidebar.classList.add("hidden");
+    labelModalTaskHeader.textContent = `${
+      type === "new" ? "New" : "Edit"
+    } Task`;
+    btnSubmitTask.textContent = `${
+      type === "new" ? "Create" : "Save Changes"
+    }!`;
+    btnSubmitTask.value = type === "new" ? "new" : "edit";
     if (type === "new") {
-      labelModalTaskHeader.textContent = "New Task";
-      btnSubmitTask.textContent = "Create!";
       // prettier-ignore
       inputTitle.value = inputDesc.value = inputDate.value = inputPriority.value = "";
-      btnSubmitTask.removeEventListener("click", this._updateTask.bind(this));
-      btnSubmitTask.addEventListener("click", this._newTask.bind(this));
     }
     if (type === "edit") {
       const project = this._findProject(containerSidebar);
-      const task = this._findTask(project, this.#currTask);
-      labelModalTaskHeader.textContent = "Edit Task";
-      btnSubmitTask.textContent = "Save Changes!";
+      const task = this._findTask(project, this.#currListItem);
       inputTitle.value = task.title;
       inputDesc.value = task.desc;
       inputDate.value = task.date;
       inputPriority.value = task.priority;
-      btnSubmitTask.removeEventListener("click", this._newTask.bind(this));
-      btnSubmitTask.addEventListener("click", this._updateTask.bind(this));
     }
+    btnSubmitTask.addEventListener("click", this._handleSubmitTask.bind(this));
     modalTask.classList.remove("hidden");
     overlay.classList.remove("hidden");
+  }
+  _handleSubmitTask(e) {
+    e.preventDefault();
+    const target = e.target;
+    if (!target) return;
+    if (target.value === "new") return this._newTask.call(this);
+    if (target.value === "edit") return this._updateTask.call(this);
   }
 
   /////////////////////////////////////
   //////////// Task interaction
 
-  _handleTask(e) {
+  _handleTaskDrag(e) {
+    const listItem = e.target.closest(".list__item");
+    e.dataTransfer.setData("text", listItem.dataset.id);
+  }
+  _handleTaskClick(e) {
     const clicked = e.target;
     if (!clicked) return;
     const listItem = clicked.closest(".list__item");
@@ -286,22 +305,23 @@ class App {
       const task = this._findTask(project, listItem);
       project.removeTask(task);
       sidebarList.removeChild(listItem);
+      return;
     }
     if (clicked.classList.contains("list__btn--edit")) {
-      this.#currTask = listItem;
+      this.#currListItem = listItem;
       this._showTaskForm("edit");
+      return;
     }
   }
-  _updateTask(e) {
-    e.preventDefault();
+  _updateTask() {
     const title = inputTitle.value;
     const desc = inputDesc.value;
     const date = inputDate.value;
     const priority = inputPriority.value;
     const arr = [title, desc, date, priority];
     const project = this._findProject(containerSidebar);
-    const task = this._findTask(project, this.#currTask);
-    task._updateTask(...arr);
+    const task = this._findTask(project, this.#currListItem);
+    task._editTask(...arr);
     this._renderTask(task, true);
     this._hideTaskForm();
   }
@@ -309,17 +329,16 @@ class App {
   /////////////////////////////////////
   //////////// Task creation
 
-  _newTask(e) {
+  _newTask() {
     // Helper functions
-    const validInputs = (...ipts) => ipts.some((ipt) => !ipt);
-    e.preventDefault();
+    const validInputs = (...ipts) => ipts.every((ipt) => ipt);
     const title = inputTitle.value;
     const desc = inputDesc.value;
     const date = inputDate.value;
     const priority = inputPriority.value;
     const arr = [title, desc, date, priority];
     // Checking for empty fields
-    if (validInputs(arr))
+    if (!validInputs(arr))
       return alert("Some fields are left empty! Please fill them in");
     const task = new Task(...arr);
     const project = this._findProject(containerSidebar);
@@ -337,14 +356,61 @@ class App {
     <button class="list__btn list__btn--edit">EDIT</button>
     `;
     if (edit) {
-      this.#currTask.innerHTML = html;
+      this.#currListItem.innerHTML = html;
       return;
     }
     const listItem = document.createElement("li");
     listItem.classList.add("list__item");
     listItem.dataset.id = task.id;
+    listItem.draggable = true;
     listItem.innerHTML = html;
     sidebarList.insertAdjacentElement("beforeend", listItem);
+  }
+  _renderChecklistTask(task) {
+    const html = `
+    <li class="list__item" data-id="${task.id}">
+      <p class="list__label">${task.title} - ${task.desc}</p>
+      <input class="list__input list__input--checkbox" type="checkbox"></input>
+    </li>
+    `;
+    checklist.insertAdjacentHTML("beforeend", html);
+  }
+
+  /////////////////////////////////////
+  //////////// Checklist interaction
+
+  _toggleChecklist() {
+    checklistBox.classList.toggle("aside--expand");
+  }
+  _handleTaskDrop(e) {
+    e.preventDefault();
+    if (e.type === "drop") {
+      const id = e.dataTransfer.getData("text");
+      const node = [...checklist.children].find((item) => (item.id = id));
+      if (node) return;
+      const project = this._findProject(containerSidebar);
+      const task = project.tasks.find((task) => task.id === id);
+      this._renderChecklistTask(task);
+    }
+  }
+  _handleTaskInput(e) {
+    // Helper functions
+    const wait = (secs) =>
+      new Promise((resolve) => setTimeout(resolve, secs * 1000));
+    e.preventDefault();
+    const input = e.target;
+    if (!input) return;
+    if (input.checked) {
+      const listItem = input.closest(".list__item");
+      const project = this._findProject(containerSidebar);
+      const task = this._findTask(project, listItem);
+      project.removeTask(task);
+      wait(0.7).then(() => checklist.removeChild(listItem));
+      const node = [...sidebarList.children].find(
+        (item) => (item.id = listItem.dataset.id)
+      );
+      sidebarList.removeChild(node);
+    }
   }
 }
 
