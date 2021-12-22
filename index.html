@@ -19,7 +19,7 @@
       type="text/css"
       href="./assets/stylesheets/icons.css"
     />
-    <script defer src="./app.js"></script>
+    <script defer type="module" src="./controller.js"></script>
     <title>To-Do-List</title>
   </head>
   <body>
@@ -35,82 +35,103 @@
         <h1 class="nav__header">To-Do-List</h1>
       </nav>
     </header>
+
     <main class="main">
       <div class="sidebar hidden">
         <nav class="sidebar__nav nav">
-          <h2 class="nav__header"></h2>
-          <button class="nav__btn nav__btn--add">
+          <button class="nav__btn nav__btn--add-task btn">
             <i class="nav__icon gg-add-r"></i>
           </button>
-          <button class="nav__btn nav__btn--close">
+          <button class="nav__btn nav__btn--close btn">
             <i class="nav__icon gg-menu-round"></i>
           </button>
         </nav>
-        <h2 class="sidebar__header">Tasks</h2>
-        <ul class="sidebar__list list"></ul>
+        <div class="sidebar__content content"></div>
       </div>
+
       <div class="menu">
         <nav class="menu__nav nav">
           <h2 class="nav__header">Projects</h2>
-          <button class="nav__btn nav__btn--add">
+          <button class="nav__btn nav__btn--add-project btn">
             <i class="nav__icon gg-add-r"></i>
           </button>
         </nav>
         <div class="menu__content content"></div>
       </div>
     </main>
+
     <div class="aside aside--top">
       <h2 class="aside__header">Checklist</h2>
       <ul class="aside__list list"></ul>
     </div>
-    <div class="popup popup--onload hidden">
-      <h2 class="popup__header">Hey, there!</h2>
-      <div class="popup__text">
-        <p>Click on a project to get started</p>
-      </div>
-    </div>
-    <div class="popup popup--sidebar hidden">
-      <h2 class="popup__header">Looks like your tasks are empty 🗑️</h2>
-      <div class="popup__text text">
-        <p class="text__label">
-          Click on the 'plus' icon above to create a new task
-        </p>
-        <p class="text__label">
-          On top of that, you can also drag them to the checklist over on the
-          right hand side
-        </p>
-      </div>
-    </div>
-    <div class="modal project hidden">
+
+    <div class="modal modal--add-project hidden">
       <button class="modal__btn modal__btn--close">&times;</button>
       <h2 class="modal__header">New Project</h2>
-      <form class="form form--grid">
-        <label class="form__label">Name</label>
-        <input class="form__input form__input--text--name" type="text" />
+
+      <form class="form form--grid form--add-project">
+        <label class="form__label">Title</label>
+        <input
+          class="form__input form__input--text--title"
+          type="text"
+          name="title"
+          required
+        />
         <label class="form__label">Color</label>
-        <input class="form__input form__input--color" type="color" />
-        <button class="form__btn form__btn--submit">Create!</button>
+        <input
+          class="form__input form__input--color"
+          type="color"
+          name="color"
+          required
+        />
+        <button class="form__btn form__btn--submit">Create</button>
       </form>
     </div>
-    <div class="modal task hidden">
+
+    <div class="modal modal--add-task hidden">
       <button class="modal__btn modal__btn--close">&times;</button>
-      <h2 class="modal__header"></h2>
-      <form class="form form--grid">
+      <h2 class="modal__header">New Task</h2>
+
+      <form class="form form--grid form--add-task">
         <label class="form__label">Title</label>
-        <input class="form__input form__input--text--title" type="text" />
+        <input
+          class="form__input form__input--text--title"
+          type="text"
+          name="title"
+          value="Exercise"
+          required
+        />
         <label class="form__label">Desc.</label>
-        <input class="form__input form__input--text--desc" type="text" />
+        <input
+          class="form__input form__input--text--desc"
+          type="text"
+          name="desc"
+          value="Push Day"
+          required
+        />
         <label class="form__label">Due</label>
-        <input class="form__input form__input--date" type="date" />
+        <input
+          class="form__input form__input--date"
+          type="date"
+          name="date"
+          value="2020-05-12"
+          required
+        />
+
         <label class="form__label">Priority</label>
-        <select class="form__select form__select--priority">
+        <select
+          class="form__select form__select--priority"
+          name="priority"
+          required
+        >
           <option class="form__option" value=""></option>
           <option class="form__option" value="low-low">Least urgent</option>
           <option class="form__option" value="low-high">Not urgent</option>
           <option class="form__option" value="high-low">Quite urgent</option>
           <option class="form__option" value="high-high">Most urgent</option>
         </select>
-        <button class="form__btn form__btn--submit"></button>
+
+        <button class="form__btn form__btn--submit">Create</button>
       </form>
     </div>
     <div class="overlay hidden"></div>
