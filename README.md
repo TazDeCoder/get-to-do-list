@@ -8,14 +8,11 @@ Get Your Priorities Straight, and Start Living Intentionally
 
 - Modern GUI
 - Intuitive Design
-- **NEW:** Interactive Checklist
+- Interactive Checklist
 
 **TASK-LIST:**
 
-- [ ] ~Cover Image (projects)~
-- [x] Interactive Checklist
-
-None at the moment, but feel free to suggest any :)
+**_None at the moment, but feel free to suggest any :)_**
 
 ## Installation
 
