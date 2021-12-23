@@ -21,6 +21,9 @@ import checklistView from "./views/checklistView.js";
 const wait = (secs) =>
   new Promise((resolve) => setTimeout(resolve, secs * 1000));
 
+/////////////////////////////////////
+//////////// Project
+
 function controlProject(id) {
   // Find project
   const project = modal.findProject(id);
@@ -34,6 +37,9 @@ function controlAddProject(newProject) {
   menuView.render(modal.state.projects);
 }
 
+/////////////////////////////////////
+//////////// Task
+
 function controlAddTask(newTask) {
   modal.addTask(newTask);
   sidebarView.render(modal.state.project);
@@ -43,6 +49,9 @@ function controlRemoveTask(id) {
   modal.removeTask(id);
   sidebarView.render(modal.state.project);
 }
+
+/////////////////////////////////////
+//////////// Checklist
 
 function controlChecklist(id) {
   modal.addToChecklist(id);
@@ -62,10 +71,10 @@ function init() {
   // Add event handlers
   // --- MENU ---
   menuView.addHandlerProject(controlProject);
-  addProjectView.addHandlerAddProject(controlAddProject);
+  addProjectView.addHandlerSubmit(controlAddProject);
   // --- SIDEBAR ---
   sidebarView.addHandlerRemoveTask(controlRemoveTask);
-  addTaskView.addHandlerAddTask(controlAddTask);
+  addTaskView.addHandlerSubmit(controlAddTask);
   // --- CHECKLIST ---
   checklistView.addHandlerTaskDrag(controlChecklist);
   checklistView.addHandlerTaskInput(controlUpdateChecklist);
