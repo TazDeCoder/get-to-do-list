@@ -33,19 +33,16 @@ class SidebarView {
 
   _showParent() {
     this._parentEl.classList.add("sidebar--expand");
-    this._parentEl.classList.remove("hidden");
   }
 
   _hideParent() {
     this._parentEl.classList.remove("sidebar--expand");
-    this._parentEl.classList.add("hidden");
   }
 
   _generateMarkup() {
     return `
-      <h2 class="sidebar__header">${this._data.title}</h2>
-      
-      <h2 class="sidebar__header">Tasks</h2>
+      <h2 class="sidebar__label sidebar__label--title">${this._data.title}</h2>
+      <h2 class="sidebar__label sidebar__label--subtitle">Tasks</h2>
 
       <ul class="sidebar__list list">
         ${this._data.tasks
@@ -81,14 +78,11 @@ class SidebarView {
   renderPopup() {
     const markup = `
       <div class="popup popup--sidebar">
-        <h1 class="popup__header">It looks like your tasks are empty</h1>
+        <h1 class="popup__label popup__label--title">It looks like your tasks are empty</h1>
+
         <div class="popup__text text">
-          <p class="text__label">
-            Click on the 'plus' icon above to create a new task
-          </p>
-          <p class="text__label">
-            On top of that, you can also drag them to the checklist over on the
-            right hand side
+          <p>
+            Click on the plus icon above to create a new one
           </p>
         </div>
       </div>

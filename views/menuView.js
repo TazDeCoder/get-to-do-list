@@ -7,18 +7,17 @@ class MenuView {
   _content = document.querySelector(".menu__content");
 
   constructor() {
-    this._parentEl.addEventListener("click", this._shrinkParent.bind(this));
+    this._parentEl.addEventListener("click", this._hidePopup.bind(this));
   }
 
   _clearContent() {
     this._content.innerHTML = "";
   }
 
-  _shrinkParent(e) {
+  _hidePopup(e) {
     const clicked = e.target.closest(".content__item");
     if (!clicked) return;
     this._popup.classList.add("hidden");
-    this._parentEl.classList.add("menu--shrink");
   }
 
   _generateMarkup() {
@@ -43,9 +42,10 @@ class MenuView {
   renderPopup() {
     const markup = `
       <div class="popup popup--menu">
-        <h2 class="popup__header">Hey, there!</h2>
-        <div class="popup__text">
-          <p>Create or click on a project to get started</p>
+        <h1 class="popup__label popup__label--title">Hey, there!</h1>
+
+        <div class="popup__text text">
+          <p>Create a new project or select an existing project to get started</p>
         </div>
       </div>
     `;
