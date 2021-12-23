@@ -51,9 +51,17 @@ iframe {
   background: none;
   border: none;
 }
+/* Label */
+.icon {
+  margin: 0 auto;
+}
 /* Text */
 .text {
   margin: 1rem;
+}
+/* Label */
+.label {
+  font-weight: 600;
 }
 /* Nav */
 .nav {
@@ -75,25 +83,31 @@ iframe {
 
 /* Popups */
 .popup {
+  z-index: 100;
   padding: 1rem;
   background-color: var(--color-popup);
   transition: opacity 700ms;
 }
 .popup--menu {
-  z-index: 100;
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 5rem;
 }
 .popup--sidebar {
-  min-width: 20rem;
+  position: absolute;
+  top: 8rem;
+  left: 50%;
+  max-width: 20rem;
+  width: 90%;
+  transform: translateX(-50%);
 }
-.popup__header {
+.popup__label--title {
   font-size: 1.4rem;
+  font-weight: 400;
 }
 .popup__text {
-  margin: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 /* Class Modifiers */
@@ -171,23 +185,30 @@ iframe {
   z-index: 10;
   display: inline-block;
   max-width: 22rem;
-  width: 0%;
+  width: 60%;
   height: 100%;
-  overflow: auto;
+  margin-left: -110%;
   background-color: var(--color-sidebar);
-  transition: width 1500ms;
+  transition: margin-left 700ms;
 }
 .sidebar--expand {
-  width: 60%;
+  margin-left: 0;
 }
 .sidebar__nav {
+  justify-content: space-around;
   width: 100%;
 }
-.sidebar__header {
+.sidebar__label {
   display: block;
   margin: 5px 12px;
+  font-weight: 400;
+}
+.sidebar__label--title {
   font-size: 1.9rem;
-  font-weight: 600;
+}
+.sidebar__label--subtitle {
+  font-size: 1.7rem;
+  text-align: center;
   text-decoration: underline;
 }
 .sidebar__text {
@@ -201,6 +222,7 @@ iframe {
   flex-direction: column;
   align-items: center;
   margin: 1rem;
+  overflow: auto;
 }
 
 /* 
@@ -218,10 +240,6 @@ iframe {
   font-size: 1.5rem;
   font-weight: 400;
   text-align: center;
-}
-.sidebar .nav__icon {
-  display: inline-block;
-  transform: scale(110%);
 }
 
 /* 
@@ -339,9 +357,6 @@ iframe {
   overflow-y: auto;
   background-color: var(--color-menu);
   transition: width 700ms, height 700ms;
-}
-.menu--shrink {
-  width: max(40%, calc(100% - 22rem));
 }
 .menu__nav {
   width: 100%;
