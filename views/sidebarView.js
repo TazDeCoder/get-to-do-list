@@ -15,7 +15,7 @@ class SidebarView {
   _handleClick(e) {
     const btn = e.target.closest(".nav__btn--close");
     if (!btn) return;
-    this._hideParent();
+    this.hideParent();
   }
 
   _handleTaskDrag(e) {
@@ -35,13 +35,14 @@ class SidebarView {
     this._parentEl.classList.add("sidebar--expand");
   }
 
-  _hideParent() {
+  hideParent() {
     this._parentEl.classList.remove("sidebar--expand");
   }
 
   _generateMarkup() {
     return `
-      <h2 class="sidebar__label sidebar__label--title">${this._data.title}</h2>
+      <h1 class="sidebar__label sidebar__label--title">${this._data.title}</h1>
+
       <h2 class="sidebar__label sidebar__label--subtitle">Tasks</h2>
 
       <ul class="sidebar__list list">
@@ -56,10 +57,10 @@ class SidebarView {
     return `
       <li class="list__item" data-id="${task.id}" draggable="true">
         <p class="list__label list__label--banner--tag" style="background-color:${task.color}"></p>
-        <h2 class="list__label list__label--text">${task.title}</h2>
+        <p class="list__label list__label--text list__label--text--title">${task.title}</p>
         <p class="list__label list__label--banner--hero">${task.due}</p>
-        <p class="list__label list__label--text">${task.desc}</p>
-        <button class="list__btn list__btn--delete">DELETE</button>
+        <p class="list__label list__label--text list__label--text--subtitle">${task.desc}</p>
+        <button class="list__btn list__btn--delete btn">DELETE</button>
       </li>
     `;
   }
@@ -80,7 +81,7 @@ class SidebarView {
       <div class="popup popup--sidebar">
         <h1 class="popup__label popup__label--title">It looks like your tasks are empty</h1>
 
-        <div class="popup__text text">
+        <div class="popup__text">
           <p>
             Click on the plus icon above to create a new one
           </p>

@@ -2,8 +2,8 @@
 
 class ChecklistView {
   _data;
-  _parentEl = document.querySelector(".aside--top");
-  _list = document.querySelector(".aside__list");
+  _parentEl = document.querySelector(".checklist");
+  _list = document.querySelector(".checklist__list");
 
   constructor() {
     this._parentEl.addEventListener("click", this._toggleParent);
@@ -13,7 +13,7 @@ class ChecklistView {
   }
 
   _toggleParent() {
-    this.classList.toggle("aside--expand");
+    this.classList.toggle("checklist--expand");
   }
 
   _clearList() {
@@ -68,7 +68,6 @@ class ChecklistView {
       e.preventDefault();
       const id = e.dataTransfer.getData("text");
       // Checking if task already exists
-      debugger;
       const currElements = Array.from(this.querySelectorAll("li"));
       const node = currElements.find((item) => item.dataset.id === id);
       if (node) return;

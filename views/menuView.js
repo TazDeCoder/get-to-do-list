@@ -25,7 +25,7 @@ class MenuView {
       .map((project) => {
         return `
           <div class="content__item" data-id="${project.id}" style="background-color: ${project.color}">
-            <p class="content__header">${project.title}</p>
+            <h1 class="content__label">${project.title}</h1>
           </div>
         `;
       })
@@ -44,7 +44,7 @@ class MenuView {
       <div class="popup popup--menu">
         <h1 class="popup__label popup__label--title">Hey, there!</h1>
 
-        <div class="popup__text text">
+        <div class="popup__text">
           <p>Create a new project or select an existing project to get started</p>
         </div>
       </div>

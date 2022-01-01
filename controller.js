@@ -32,16 +32,22 @@ function controlProject(id) {
   if (!project.tasks.length) sidebarView.renderPopup();
 }
 
-function controlAddProject(newProject) {
+async function controlAddProject(newProject) {
   modal.addProject(newProject);
+  setTimeout(function () {
+    addProjectView.hideWindow();
+  }, 1000 * 0.5);
   menuView.render(modal.state.projects);
 }
 
 /////////////////////////////////////
 //////////// Task
 
-function controlAddTask(newTask) {
+async function controlAddTask(newTask) {
   modal.addTask(newTask);
+  setTimeout(function () {
+    addTaskView.hideWindow();
+  }, 1000 * 0.5);
   sidebarView.render(modal.state.project);
 }
 
@@ -63,6 +69,8 @@ async function controlUpdateChecklist(id) {
   await wait(0.5);
   checklistView.update(modal.state.checklist);
   sidebarView.render(modal.state.project);
+  await wait(0.1);
+  if (modal.state.project.tasks.length === 0) sidebarView.hideParent();
 }
 
 function init() {
