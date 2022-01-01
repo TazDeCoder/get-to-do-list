@@ -1,0 +1,26 @@
+{
+  "name": "to-do-list",
+  "version": "1.0.0",
+  "description": "To-Do application",
+  "default": "index.html",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --dist-dir ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tarwat-uddin/to-do-list.git"
+  },
+  "author": "Tarwat Uddin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tarwat-uddin/to-do-list/issues"
+  },
+  "homepage": "https://github.com/tarwat-uddin/to-do-list#readme",
+  "devDependencies": {
+    "parcel": "^2.0.1"
+  },
+  "dependencies": {
+    "core-js": "^3.20.1"
+  }
+}

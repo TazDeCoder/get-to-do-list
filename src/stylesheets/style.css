@@ -14,7 +14,7 @@ html {
   font-size: 16px;
 }
 body {
-  font-family: sans-serif;
+  font-family: "Raleway", sans-serif;
   background-color: #fff;
 }
 nav,
@@ -119,8 +119,8 @@ iframe {
   font-weight: 400;
 }
 .popup__text {
-  margin: 1rem;
   font-size: 1rem;
+  margin: 1rem;
   font-weight: 600;
 }
 
