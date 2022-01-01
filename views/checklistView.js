@@ -59,6 +59,7 @@ class ChecklistView {
       return this.renderError();
     this._data = data;
     const markup = this._generateMarkup();
+    this._clearList();
     this._list.insertAdjacentHTML("afterbegin", markup);
   }
 
@@ -67,7 +68,9 @@ class ChecklistView {
       e.preventDefault();
       const id = e.dataTransfer.getData("text");
       // Checking if task already exists
-      const node = [...this.children].find((item) => (item.id = id));
+      debugger;
+      const currElements = Array.from(this.querySelectorAll("li"));
+      const node = currElements.find((item) => item.dataset.id === id);
       if (node) return;
       handler(id);
     });

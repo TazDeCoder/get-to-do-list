@@ -188,6 +188,7 @@ iframe {
   width: 60%;
   height: 100%;
   margin-left: -110%;
+  overflow: auto;
   background-color: var(--color-sidebar);
   transition: margin-left 700ms;
 }
@@ -222,7 +223,6 @@ iframe {
   flex-direction: column;
   align-items: center;
   margin: 1rem;
-  overflow: auto;
 }
 
 /* 
