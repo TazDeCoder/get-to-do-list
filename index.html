@@ -39,13 +39,13 @@
     <main class="main">
       <div class="sidebar">
         <nav class="sidebar__nav nav">
-          <button class="nav__btn nav__btn--add-task btn">
-            <p class="btn__label label">Add Task</p>
+          <button class="nav__btn nav__btn--add-task btn--icon">
+            <p class="btn__label"><span class="span--bold">Add Task</span></p>
             <i class="btn__icon icon gg-add-r"></i>
           </button>
 
-          <button class="nav__btn nav__btn--close btn">
-            <p class="btn__label label">Close Project</p>
+          <button class="nav__btn nav__btn--close btn--icon">
+            <p class="btn__label"><span class="span--bold">Close Project</span></p>
             <i class="btn__icon icon gg-menu-round"></i>
           </button>
         </nav>
@@ -54,9 +54,9 @@
 
       <div class="menu">
         <nav class="menu__nav nav">
-          <h2 class="nav__header">Projects</h2>
-          <button class="nav__btn nav__btn--add-project btn">
-            <p class="btn__label label">Add Project</p>
+          <h1 class="nav__label">Projects</h1>
+          <button class="nav__btn nav__btn--add-project btn--icon">
+            <p class="btn__label"><span class="span--bold">Add Project</span></p>
             <i class="btn__icon icon gg-add-r"></i>
           </button>
         </nav>
@@ -64,9 +64,9 @@
       </div>
     </main>
 
-    <div class="aside aside--top">
-      <h2 class="aside__header">Checklist</h2>
-      <ul class="aside__list list"></ul>
+    <div class="checklist">
+      <h1 class="checklist__label">Checklist</h2>
+      <ul class="checklist__list list"></ul>
     </div>
 
     <div class="modal modal--add-project hidden">
@@ -102,7 +102,6 @@
           class="form__input form__input--text--title"
           type="text"
           name="title"
-          value="Exercise"
           required
         />
         <label class="form__label">Desc.</label>
@@ -110,7 +109,6 @@
           class="form__input form__input--text--desc"
           type="text"
           name="desc"
-          value="Push Day"
           required
         />
         <label class="form__label">Due</label>
@@ -118,7 +116,6 @@
           class="form__input form__input--date"
           type="date"
           name="date"
-          value="2020-05-12"
           required
         />
 

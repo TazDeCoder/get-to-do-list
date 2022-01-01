@@ -14,6 +14,7 @@ html {
   font-size: 16px;
 }
 body {
+  font-family: sans-serif;
   background-color: #fff;
 }
 nav,
@@ -30,9 +31,17 @@ iframe {
    height: auto;
 }
 :root {
-  --color-popup: #f2ffd1;
-  --color-sidebar: #d6ffdf;
-  --color-menu: #f7f7f7;
+  /* Primary Color */
+  --color-head: #e74c3c;
+  --color-btn: #e95a4b;
+  --color-btn-hover: #d62c1a;
+  /* Secondary Colors */
+  --color-sidebar: #adeabb;
+  /* Tertiary Colors */
+  --color-menu: #fefffe;
+  --color-task: #fafdfe;
+  --color-checklist: #edf8fa;
+  --color-popup: #fbefe2;
 }
 
 /*
@@ -46,21 +55,24 @@ iframe {
 
 /* Buttons */
 .btn {
-  padding: 1px;
+  color: white;
+  cursor: pointer;
+  background-color: var(--color-btn);
+}
+.btn:hover {
+  background-color: var(--color-btn-hover);
+}
+.btn--icon {
   cursor: pointer;
   background: none;
   border: none;
 }
-/* Label */
+/* Icon */
 .icon {
   margin: 0 auto;
 }
-/* Text */
-.text {
-  margin: 1rem;
-}
-/* Label */
-.label {
+/* Span */
+.span--bold {
   font-weight: 600;
 }
 /* Nav */
@@ -95,10 +107,11 @@ iframe {
 }
 .popup--sidebar {
   position: absolute;
-  top: 8rem;
+  top: 11rem;
   left: 50%;
   max-width: 20rem;
   width: 90%;
+  border-radius: 7px;
   transform: translateX(-50%);
 }
 .popup__label--title {
@@ -106,6 +119,7 @@ iframe {
   font-weight: 400;
 }
 .popup__text {
+  margin: 1rem;
   font-size: 1rem;
   font-weight: 600;
 }
@@ -120,7 +134,7 @@ iframe {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 1000;
   width: 100%;
   height: 100%;
   backdrop-filter: blur(3px);
@@ -137,22 +151,13 @@ iframe {
 .head {
   width: 100%;
   height: 4rem;
-  background-color: red;
+  background-color: var(--color-head);
 }
 .head__nav {
   justify-content: center;
   height: 100%;
 }
-
-/* 
- *
- * Head
- *
- * * * Nav
- *
- *
- */
-
+/* Nav */
 .head .nav__header {
   font-size: 2.1rem;
   font-weight: 600;
@@ -183,7 +188,6 @@ iframe {
   top: 0;
   left: 0;
   z-index: 10;
-  display: inline-block;
   max-width: 22rem;
   width: 60%;
   height: 100%;
@@ -199,47 +203,23 @@ iframe {
   justify-content: space-around;
   width: 100%;
 }
-.sidebar__label {
-  display: block;
-  margin: 5px 12px;
+.sidebar__label--title {
+  margin: 1.5rem 1rem;
+  font-size: 2.1rem;
   font-weight: 400;
 }
-.sidebar__label--title {
-  font-size: 1.9rem;
-}
 .sidebar__label--subtitle {
-  font-size: 1.7rem;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+  font-weight: 500;
   text-align: center;
   text-decoration: underline;
-}
-.sidebar__text {
-  display: block;
-  width: 90%;
-  margin: 1rem;
-  font-size: 1.8rem;
 }
 .sidebar__list {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 1rem;
-}
-
-/* 
- *
- * Sidebar
- *
- * * * Nav
- *
- *
- */
-
-.sidebar .nav__header {
-  flex-grow: 1;
-  margin: 5px;
-  font-size: 1.5rem;
-  font-weight: 400;
-  text-align: center;
+  margin: 1rem 0;
 }
 
 /* 
@@ -253,17 +233,15 @@ iframe {
 
 .sidebar .list__item {
   position: relative;
-  max-width: 18rem;
-  width: 10rem;
+  width: 12rem;
   min-height: 8rem;
   max-height: 12rem;
   padding: 0.5rem;
-  margin: 12px 0;
+  margin: 0.5rem 0;
   overflow: hidden;
-  font-size: 1rem;
-  text-align: center;
   cursor: pointer;
-  background-color: white;
+  text-align: center;
+  background-color: var(--color-task);
   border-radius: 5px;
   transition: all 700ms;
 }
@@ -286,57 +264,39 @@ iframe {
   border-radius: 12px;
 }
 .sidebar .list__label--text {
-  display: inline-block;
-  width: 90%;
+  display: block;
   min-height: 1rem;
   max-height: 1.5rem;
-  overflow: hidden;
-  font-size: 1em;
-  font-weight: 400;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.sidebar .list__label--text--title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.sidebar .list__label--text--subtitle {
+  font-size: 1.3rem;
+  font-weight: 500;
 }
 .sidebar .list__btn {
   width: 4rem;
   padding: 5px;
   margin: 1rem auto;
   text-align: center;
-  cursor: pointer;
-  background-color: azure;
   border: none;
   border-radius: 12px;
 }
-.sidebar .list__btn:hover {
-  background-color: whitesmoke;
-}
 
-@media only screen and (min-width: 363px) {
+@media only screen and (min-width: 586px) {
   .sidebar .list__item {
-    width: 12rem;
-    max-height: 14rem;
-  }
-  .sidebar .list__item > h2 {
-    width: 90%;
-    margin: 0 auto;
-    font-size: 1.6em;
-    font-weight: 600;
+    width: 14rem;
+    max-height: 16rem;
+    padding: 1rem;
   }
   .sidebar .list__label--text {
-    display: block;
     max-width: initial;
     width: 100%;
     max-height: 2.5rem;
-    overflow: hidden;
-    font-size: 1.1em;
-  }
-}
-@media only screen and (min-width: 500px) {
-  .sidebar .list__item:hover {
-    height: initial;
-    width: 70%;
-    transform: scale(110%);
-  }
-  .sidebar .list__label--text {
     text-overflow: ellipsis;
     white-space: pre-wrap;
   }
@@ -350,17 +310,19 @@ iframe {
  */
 
 .menu {
-  z-index: 1;
-  float: right;
   width: 100%;
   height: 100%;
-  overflow-y: auto;
   background-color: var(--color-menu);
-  transition: width 700ms, height 700ms;
 }
 .menu__nav {
-  width: 100%;
-  overflow: hidden;
+  flex-direction: column;
+  text-align: center;
+}
+/* Nav */
+.menu .nav__label {
+  margin: 1rem;
+  font-weight: 300;
+  font-size: 2.7rem;
 }
 .menu__content {
   display: grid;
@@ -368,27 +330,17 @@ iframe {
   row-gap: 1rem;
   justify-items: center;
   width: 100%;
+  margin-top: 1rem;
 }
 
 @media only screen and (min-width: 796px) {
+  .menu__nav {
+    flex-direction: row;
+    text-align: initial;
+  }
   .menu__content {
     grid-template-columns: repeat(3, 1fr);
   }
-}
-
-/* 
- *
- * Menu
- *
- * * * Nav
- * 
- *
- */
-
-.menu .nav__header {
-  margin: 1rem;
-  font-size: 1.9rem;
-  text-align: center;
 }
 
 /* 
@@ -401,23 +353,21 @@ iframe {
  */
 
 .menu .content__item {
-  width: 8rem;
-  height: 8rem;
-  padding: 1rem;
-  margin-top: 1rem;
-  overflow: hidden;
-  cursor: pointer;
+  width: 10rem;
+  height: 10rem;
+  margin: 0.5rem 0;
   border: 1px solid black;
   border-radius: 50%;
   transition: transform 700ms;
 }
 .menu .content__item:hover {
+  cursor: pointer;
   transform: scale(120%);
 }
-.menu .content__header {
+.menu .content__label {
   font-size: 1.5rem;
   font-weight: 600;
-  line-height: 6rem;
+  line-height: 6;
   color: white;
   text-align: center;
   text-overflow: ellipsis;
@@ -426,29 +376,21 @@ iframe {
 
 @media only screen and (min-width: 586px) {
   .menu .content__item {
-    width: 12rem;
-    height: 12rem;
+    width: 14rem;
+    height: 14rem;
+    padding: 2rem;
     margin: 1rem;
-  }
-  .menu .content__header {
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 10rem;
-    color: white;
-    text-align: center;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
 
 /* 
  *
- * Aside Top
+ * Checklist
  *
  *
  */
 
-.aside--top {
+.checklist {
   position: fixed;
   top: 5rem;
   right: 5rem;
@@ -458,32 +400,29 @@ iframe {
   overflow: hidden;
   cursor: pointer;
   visibility: hidden;
-  background-color: whitesmoke;
+  background-color: var(--color-checklist);
   border: 2px solid black;
   border-radius: 12px;
   opacity: 0;
   transition: height 700ms;
 }
-.aside--top:hover {
-  background-color: #e6e6e6;
-}
-.aside--expand {
+.checklist--expand {
   height: 12rem;
-  overflow: auto;
 }
-.aside__header {
+.checklist__label {
   font-size: 1.4rem;
+  font-weight: 500;
   text-decoration: underline;
 }
-.aside__list {
+.checklist__list {
   display: flex;
   flex-direction: column;
   height: 80%;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 @media only screen and (min-width: 796px) {
-  .aside--top {
+  .checklist {
     visibility: visible;
     opacity: 1;
   }
@@ -491,26 +430,25 @@ iframe {
 
 /* 
  *
- * Aside Top
+ * Checklist
  *
  * * * List
  * 
  *
  */
 
-.aside .list__item {
+.checklist .list__item {
   position: relative;
   width: 12rem;
   padding: 0.5rem;
   margin: 5px 0;
-  overflow: hidden;
   font-size: 1rem;
   list-style: none;
   background-color: white;
   border-radius: 5px;
   transition: opacity 700ms;
 }
-.aside .list__input--checkbox {
+.checklist .list__input--checkbox {
   position: absolute;
   top: 6px;
   right: 4px;
@@ -531,7 +469,7 @@ iframe {
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: 10;
+  z-index: 10000;
   width: 90%;
   max-width: 40rem;
   padding: 1rem;
@@ -547,7 +485,6 @@ iframe {
   line-height: 1.5;
 }
 .modal__btn {
-  font-family: inherit;
   cursor: pointer;
 }
 .modal__btn--close {
@@ -598,7 +535,6 @@ iframe {
 .modal .form__btn {
   padding: 1.25rem 4.5rem;
   margin-top: 1rem;
-  font-family: inherit;
   font-size: 1rem;
   cursor: pointer;
   border: 1px solid black;
