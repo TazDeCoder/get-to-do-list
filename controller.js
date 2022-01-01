@@ -74,8 +74,6 @@ async function controlUpdateChecklist(id) {
 }
 
 function init() {
-  controlAddProject({ title: "Default", color: "#0000ff" });
-  menuView.renderPopup();
   // Add event handlers
   // --- MENU ---
   menuView.addHandlerProject(controlProject);
@@ -86,6 +84,14 @@ function init() {
   // --- CHECKLIST ---
   checklistView.addHandlerTaskDrag(controlChecklist);
   checklistView.addHandlerTaskInput(controlUpdateChecklist);
+  // Load projects
+  modal.restoreProjects();
+  menuView.render(modal.state.projects);
+  // Load checklist
+  modal.restoreChecklist();
+  checklistView.render(modal.state.checklist);
+  // Render popup
+  menuView.renderPopup();
 }
 
 init();

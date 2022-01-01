@@ -92,15 +92,24 @@ class Project {
   }
 }
 
-////////////////////////////////////////////////
-////// Export Functions
-///////////////////////////////////////////////
-
 // Helper Functions
+
 function findTask(id) {
   const task = state.project.tasks.find((task) => task.id === id);
   return task;
 }
+
+function persistProjects() {
+  localStorage.setItem("projects", JSON.stringify(state.projects));
+}
+
+function persistChecklist() {
+  localStorage.setItem("checklist", JSON.stringify(state.checklist));
+}
+
+////////////////////////////////////////////////
+////// Export Functions
+///////////////////////////////////////////////
 
 export function findProject(id) {
   const project = state.projects.find((project) => project.id === id);
@@ -112,6 +121,17 @@ export function addProject(newProject) {
   const object = new Project(newProject.title, newProject.color);
   state.projects.push(object);
   state.project = object;
+  persistProjects();
+}
+
+export function restoreProjects() {
+  const storage = localStorage.getItem("projects");
+  if (!storage) return;
+  const parsedData = JSON.parse(storage);
+  parsedData.forEach((project) =>
+    Object.setPrototypeOf(project, Project.prototype)
+  );
+  state.projects = parsedData;
 }
 
 export function addTask(newTask) {
@@ -122,19 +142,31 @@ export function addTask(newTask) {
     newTask.priority
   );
   state.project.addTask(object);
+  persistProjects();
 }
 
 export function removeTask(id) {
   state.project.removeTask(id);
+  persistProjects();
 }
 
 export function addToChecklist(id) {
   const task = findTask(id);
   state.checklist.push(task);
+  persistChecklist();
 }
 
 export function updateChecklist(id) {
   const idx = state.checklist.findIndex((el) => el.id === id);
   if (idx > -1) state.checklist.splice(idx, 1);
   state.project.removeTask(id);
+  persistChecklist();
+}
+
+export function restoreChecklist() {
+  const storage = localStorage.getItem("checklist");
+  if (!storage) return;
+  const parsedData = JSON.parse(storage);
+  parsedData.forEach((task) => Object.setPrototypeOf(task, Project.prototype));
+  state.checklist = parsedData;
 }
