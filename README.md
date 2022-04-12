@@ -1,4 +1,4 @@
-# To-Do-List
+# To-Do-List JS
 
 ## Screenshots
 
@@ -8,17 +8,21 @@
 
 ## Description
 
-Get Your Priorities Straight, and Start Living Intentionally
+A JavaScript application that helps you get your priorities in check
 
 **Features:**
 
 - Modern GUI
 - Intuitive Design
+- Project To-Do's
 - Interactive Checklist
 
-**TASK-LIST:**
+## What I've Learnt
 
-**_None at the moment, but feel free to suggest any :)_**
++ Understanding and applying the MVC architecture
++ Using asynchronous functions (Promises)
++ Building reusable object contructors using ES6 classes
++ & much more
 
 ## Installation
 
@@ -26,7 +30,7 @@ To use this project, first clone the repo on your device using the command below
 
 `git init`
 
-`https://github.com/tarwat-uddin/to-do-list.git`
+`https://github.com/tarwat-uddin/to-do-list-js.git`
 
 ## License
 
