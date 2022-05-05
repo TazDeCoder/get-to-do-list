@@ -5,16 +5,12 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-html,
-body {
-  width: 100%;
-  height: 100%;
-}
 html {
+  font-family: "Raleway", sans-serif;
   font-size: 16px;
 }
 body {
-  font-family: "Raleway", sans-serif;
+  min-height: 100vh;
   background-color: #fff;
 }
 nav,
@@ -30,6 +26,7 @@ iframe {
    max-width: 100%;
    height: auto;
 }
+/* CSS variables */
 :root {
   /* Primary Color */
   --color-head: #e74c3c;
@@ -53,7 +50,7 @@ iframe {
 
 /* General Elements */
 
-/* Buttons */
+/* Button */
 .btn {
   color: white;
   cursor: pointer;
@@ -63,17 +60,16 @@ iframe {
   background-color: var(--color-btn-hover);
 }
 .btn--icon {
-  cursor: pointer;
   background: none;
   border: none;
 }
+.btn--icon:hover {
+  background: none;
+}
 /* Icon */
 .icon {
+  color: black;
   margin: 0 auto;
-}
-/* Span */
-.span--bold {
-  font-weight: 600;
 }
 /* Nav */
 .nav {
@@ -149,18 +145,44 @@ iframe {
  */
 
 .head {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 4rem;
+  padding: 1rem;
   background-color: var(--color-head);
 }
-.head__nav {
-  justify-content: center;
-  height: 100%;
+.head__item {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
-/* Nav */
-.head .nav__header {
+.head__item-label--title {
+  margin: 0 1rem;
   font-size: 2.1rem;
   font-weight: 600;
+  color: var(--color-secondary-dark);
+  text-align: center;
+}
+.head__item-img {
+  margin: 0 0.5rem;
+}
+.head__nav {
+  flex-grow: 1;
+  margin: 1rem 0.5rem;
+  justify-content: flex-end;
+}
+.head__nav-item {
+  display: inline-block;
+  margin: 0 0.5rem;
+  padding: 10px 0;
+}
+.head__nav-item a {
+  text-decoration: none;
+  color: inherit;
+  font-size: 3rem;
 }
 
 /* 
@@ -172,8 +194,7 @@ iframe {
 
 .main {
   position: relative;
-  width: 100%;
-  height: 100%;
+  height: 100vh;
 }
 
 /* 
@@ -318,8 +339,7 @@ iframe {
   flex-direction: column;
   text-align: center;
 }
-/* Nav */
-.menu .nav__label {
+.menu__nav .nav__label {
   margin: 1rem;
   font-weight: 300;
   font-size: 2.7rem;

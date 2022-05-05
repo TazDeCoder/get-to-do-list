@@ -1,7 +1,7 @@
 {
-  "name": "to-do-list",
+  "name": "to-do-list-js",
   "version": "1.0.0",
-  "description": "To-Do application",
+  "description": "to-do list",
   "default": "index.html",
   "scripts": {
     "start": "parcel index.html",
@@ -9,18 +9,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tarwat-uddin/to-do-list.git"
+    "url": "git+https://github.com/tarwat-uddin/to-do-list-js.git"
   },
   "author": "Tarwat Uddin",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tarwat-uddin/to-do-list/issues"
+    "url": "https://github.com/tarwat-uddin/to-do-list-js/issues"
   },
-  "homepage": "https://github.com/tarwat-uddin/to-do-list#readme",
+  "homepage": "https://github.com/tarwat-uddin/to-do-list-js#readme",
   "devDependencies": {
     "parcel": "^2.0.1"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.1.1",
     "core-js": "^3.20.1"
   }
 }

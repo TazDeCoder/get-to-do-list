@@ -4,71 +4,103 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="./src/stylesheets/reset.css" />
-    <link rel="stylesheet" type="text/css" href="./src/stylesheets/style.css" />
-    <link rel="stylesheet" type="text/css" href="./src/stylesheets/icons.css" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+      type="text/css"
+      href="./public/stylesheets/reset.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="./public/stylesheets/style.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="./public/stylesheets/icons.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;500;600&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="./node_modules/@fortawesome/fontawesome-free/css/brands.css"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="./public/images/favicon.ico" />
     <script defer type="module" src="./src/app/controller.js"></script>
-    <title>To-Do-List</title>
+    <title>To-Do-List JS</title>
   </head>
   <body>
     <header class="head">
-      <nav class="head__nav nav">
+      <div class="head__item">
+        <h1 class="head__item-label head__item-label--title">To-Do-List</h1>
         <a
           href="https://www.iconfinder.com/paomedia"
           title="Link to Designer"
           target="_blank"
+          rel="noopener"
         >
-          <img src="./src/images/notepad_icon.png" />
+          <img
+            class="head__item-img"
+            src="./public/images/assets/notepad_icon.png"
+          />
         </a>
-        <h1 class="nav__header">To-Do-List</h1>
+      </div>
+      <nav class="nav head__nav">
+        <div class="head__nav-item">
+          <a
+            href="https://github.com/tarwat-uddin/to-do-list-js"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="fa-brands fa-github" />
+          </a>
+        </div>
+        <div class="head__nav-item">
+          <a href="https://dev.to/tarwatuddin" target="_blank" rel="noopener">
+            <i class="fa-brands fa-dev" />
+          </a>
+        </div>
       </nav>
     </header>
 
     <main class="main">
       <div class="sidebar">
-        <nav class="sidebar__nav nav">
-          <button class="nav__btn nav__btn--add-task btn--icon">
-            <p class="btn__label"><span class="span--bold">Add Task</span></p>
-            <i class="btn__icon icon gg-add-r"></i>
+        <nav class="nav sidebar__nav">
+          <button class="btn btn--icon nav__btn nav__btn--add-task">
+            <i class="icon gg-add-r" title="add new task" />
           </button>
-
-          <button class="nav__btn nav__btn--close btn--icon">
-            <p class="btn__label">
-              <span class="span--bold">Close Project</span>
-            </p>
-            <i class="btn__icon icon gg-menu-round"></i>
+          <button class="btn btn--icon nav__btn nav__btn--close">
+            <i class="icon gg-menu-round" title="close tasks" />
           </button>
         </nav>
+        <!-- TASKS CONTENT -->
         <div class="sidebar__content content"></div>
       </div>
 
       <div class="menu">
-        <nav class="menu__nav nav">
+        <nav class="nav menu__nav">
           <h1 class="nav__label">Projects</h1>
-          <button class="nav__btn nav__btn--add-project btn--icon">
-            <p class="btn__label">
-              <span class="span--bold">Add Project</span>
-            </p>
-            <i class="btn__icon icon gg-add-r"></i>
+          <button class="btn btn--icon nav__btn nav__btn--add-project">
+            <i class="icon gg-add-r" title="add new project" />
           </button>
         </nav>
+        <!-- PROJECT CONTENT -->
         <div class="menu__content content"></div>
       </div>
     </main>
 
     <div class="checklist">
       <h1 class="checklist__label">Checklist</h1>
+      <!-- CHECKLIST BOX -->
       <ul class="checklist__list list"></ul>
     </div>
 
     <div class="modal modal--add-project hidden">
       <button class="modal__btn modal__btn--close">&times;</button>
       <h2 class="modal__header">New Project</h2>
-
+      <!-- NEW PROJECT FORM -->
       <form class="form form--grid form--add-project">
         <label class="form__label">Title</label>
         <input
@@ -84,14 +116,14 @@
           name="color"
           required
         />
-        <button class="form__btn form__btn--submit">Create</button>
+        <button class="btn form__btn form__btn--submit">Create</button>
       </form>
     </div>
 
     <div class="modal modal--add-task hidden">
       <button class="modal__btn modal__btn--close">&times;</button>
       <h2 class="modal__header">New Task</h2>
-
+      <!-- NEW TASK FORM -->
       <form class="form form--grid form--add-task">
         <label class="form__label">Title</label>
         <input
@@ -114,7 +146,6 @@
           name="date"
           required
         />
-
         <label class="form__label">Priority</label>
         <select
           class="form__select form__select--priority"
@@ -127,10 +158,10 @@
           <option class="form__option" value="high-low">Quite urgent</option>
           <option class="form__option" value="high-high">Most urgent</option>
         </select>
-
-        <button class="form__btn form__btn--submit">Create</button>
+        <button class="btn form__btn form__btn--submit">Create</button>
       </form>
     </div>
-    <div class="overlay hidden"></div>
+    <!-- PAGE OVERLAY -->
+    <div class="overlay hidden" />
   </body>
 </html>
