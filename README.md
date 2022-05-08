@@ -2,9 +2,8 @@
 
 ## Screenshots
 
-![screenshots-0](/screenshots/screenshots-0.png)
-![screenshots-1](/screenshots/screenshots-1.png)
-![screenshots-2](/screenshots/screenshots-2.png)
+<img src="./public/images/screenshots/screenshots-1.png" alt="desktop-screenshot" width="65%"></img>
+<img src="./public/images/screenshots/screenshots-2.png" alt="mobile-screenshot" width="30%"></img>
 
 ## Description
 
@@ -12,17 +11,17 @@ A JavaScript application that helps you get your priorities in check
 
 **Features:**
 
-- Modern GUI
+- Modern User Interface
 - Intuitive Design
 - Project To-Do's
 - Interactive Checklist
 
 ## What I've Learnt
 
-+ Understanding and applying the MVC architecture
-+ Using asynchronous functions (Promises)
-+ Building reusable object contructors using ES6 classes
-+ & much more
+- Understanding and applying the MVC architecture
+- Using asynchronous functions (Promises)
+- Building reusable object contructors using ES6 classes
+- & much more
 
 ## Installation
 
@@ -30,7 +29,7 @@ To use this project, first clone the repo on your device using the command below
 
 `git init`
 
-`https://github.com/tarwat-uddin/to-do-list-js.git`
+`https://github.com/tarwat-uddin/get-to-do-list.git`
 
 ## License
 
